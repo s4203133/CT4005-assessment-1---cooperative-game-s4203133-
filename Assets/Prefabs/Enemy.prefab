@@ -96,8 +96,8 @@ GameObject:
   - component: {fileID: 7340119872616459370}
   - component: {fileID: 7340119872616459369}
   - component: {fileID: 7340119872616459373}
-  - component: {fileID: 7340119872616459374}
-  - component: {fileID: 7340119872616459375}
+  - component: {fileID: 8249845756674276236}
+  - component: {fileID: 7935379715001298905}
   - component: {fileID: 7340119872616459344}
   m_Layer: 7
   m_Name: Enemy
@@ -120,7 +120,7 @@ Transform:
   m_Children:
   - {fileID: 2116552602}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7340119872616459371
 MeshFilter:
@@ -208,7 +208,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7340119872616459374
+--- !u!114 &8249845756674276236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,13 +217,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7340119872616459368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f345a81d3b306e746a71df70c03da27e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b051ab7d3dd65b458380a3965126c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   players: []
-  minMaxSpeedRange: {x: 1.5, y: 2.5}
---- !u!114 &7340119872616459375
+  minMaxSpeedRange: {x: 0, y: 0}
+--- !u!114 &7935379715001298905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,12 +232,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7340119872616459368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9955e05f5e24ca846b08ccfa558aeba1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a2c3e89fe5c9074586e6f137eb9b736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 50
-  knockBackLength: 0.3
-  knockBackMultiplyer: 21
+  health: 0
+  knockBackLength: 0
+  knockBackMultiplyer: 0
   knockBackTimer: 0
   knockBackForce: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 0}
