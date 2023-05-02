@@ -108,4 +108,12 @@ public class PowerUp : MonoBehaviour {
     public void SetPowerUpActive(bool value) {
         powerUpActive = value;
     }
+
+    public float GetPowerUpLength() {
+        return powerUpLength;
+    }
+
+    public float GetTimer() {
+        return timer;
+    }
 }

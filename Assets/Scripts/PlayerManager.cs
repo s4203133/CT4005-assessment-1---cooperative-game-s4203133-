@@ -95,9 +95,11 @@ public class PlayerManager : MonoBehaviour
             levelStartCounter = 0;
         }
 
+        // If in the lobby set number of players to start level the amount of players
         if(currentLevel == level.Lobby) {
             numberOfPlayersToProgress = players.Count;
-        } else {
+        } // Otherwise set the amount of players required to start next level the amount of players still alive 
+        else {
             numberOfPlayersToProgress = numberOfActivePlayers;
         }
 

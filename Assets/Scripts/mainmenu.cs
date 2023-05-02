@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenu : MonoBehaviour
+public class mainmenu : MonoBehaviour
 {
     public Button playButton;
     public Button exitButton;
@@ -12,16 +12,15 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
 
-        playButton.onClick.AddListener(PlayGame);
+        //playButton.onClick.AddListener(PlayGame);
 
-        exitButton.onClick.AddListener(QuitGame);
+        //exitButton.onClick.AddListener(QuitGame);
     }
-    void PlayGame()
+    public void PlayGame()
     {
-
         SceneManager.LoadScene(1);
     }
-    void QuitGame()
+    public void QuitGame()
     {
         Application.Quit();
     }

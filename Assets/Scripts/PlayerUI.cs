@@ -6,6 +6,10 @@ public class PlayerUI : MonoBehaviour {
     public Image healthBar;
     private Vector2 healthBarScale;
 
+    [Header("PowerUp Timer Variables")]
+    public Image powerUpTimer;
+    private Vector2 powerUpTimerScale;
+
     [Header("Throwing Bar Variables")]
     /*public Image throwingBar;
     public Image throwingBarBackground;
@@ -14,7 +18,8 @@ public class PlayerUI : MonoBehaviour {
 
     private PlayerController playerController;
     private PlayerHealth playerHealth;
-    private PlayerManager playerManager; 
+    private PlayerManager playerManager;
+    private PowerUp powerUp;
     private Camera cam;
 
     public GameObject directionalArrow;
@@ -25,6 +30,7 @@ public class PlayerUI : MonoBehaviour {
         playerController = GetComponent<PlayerController>();
         playerHealth = GetComponent<PlayerHealth>();
         playerManager = FindObjectOfType<PlayerManager>();
+        powerUp = GetComponent<PowerUp>();
         cam = Camera.main;
 
         Color playerColor = GetComponent<MeshRenderer>().material.color;
@@ -33,19 +39,24 @@ public class PlayerUI : MonoBehaviour {
         switch (transform.name) {
             case ("Player1"):
                 healthBar = GameObject.Find("Player1HealthBar").GetComponent<Image>();
+                powerUpTimer = GameObject.Find("Player1PowerUpBar").GetComponent<Image>();
                 break;
             case ("Player2"):
                 healthBar = GameObject.Find("Player2HealthBar").GetComponent<Image>();
+                powerUpTimer = GameObject.Find("Player2PowerUpBar").GetComponent<Image>();
                 break;
             case ("Player3"):
                 healthBar = GameObject.Find("Player3HealthBar").GetComponent<Image>();
+                powerUpTimer = GameObject.Find("Player3PowerUpBar").GetComponent<Image>();
                 break;
             case ("Player4"):
                 healthBar = GameObject.Find("Player4HealthBar").GetComponent<Image>();
+                powerUpTimer = GameObject.Find("Player4PowerUpBar").GetComponent<Image>();
                 break;
         }
 
         healthBarScale = healthBar.rectTransform.localScale;
+        powerUpTimerScale = powerUpTimer.rectTransform.localScale;
         SetUIBarsVisible(true);
         //throwingBarWidth = throwingBar.rectTransform.localScale.x;
         //throwingBarColor = throwingBar.color;
@@ -60,6 +71,7 @@ public class PlayerUI : MonoBehaviour {
         }
 
         SetHealthUIBar();
+        SetPowerUpTimer();
 
         //SetThrowingUIBar();
         
@@ -91,7 +103,23 @@ public class PlayerUI : MonoBehaviour {
         healthBarScalar = (playersHealth * (100/playerHealth.maxHealth)) / 100;
 
         healthBar.rectTransform.localScale = new Vector2 (Mathf.Lerp(healthBar.rectTransform.localScale.x, healthBarScalar, 0.25f), healthBarScale.y);
-    } 
+    }
+
+    void SetPowerUpTimer() {
+
+        if (playerHealth.isDead) {
+            powerUpTimer.enabled = false;
+        } else {
+            powerUpTimer.enabled = true;
+        }
+        float powerUpTimerScalar = 0;
+        float powerUpTime = powerUp.GetTimer();
+        float powerUpLength = powerUp.GetPowerUpLength();
+
+        powerUpTimerScalar = powerUpTime * (100 / powerUpLength) / 100;
+
+        powerUpTimer.rectTransform.localScale = new Vector2(powerUpTimerScalar, powerUpTimerScale.y);
+    }
 
     /*void SetThrowingUIBar() {
         if (playerController.interactInputTime > 0.2) {
