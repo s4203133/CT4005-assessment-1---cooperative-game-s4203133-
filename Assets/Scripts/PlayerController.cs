@@ -1,10 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using UnityEditor.Events;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
-using System.Collections.Generic;
-using static PlayerManager;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -40,6 +38,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float rotateSpeed;
     private Rigidbody rb;
+    private PhysicMaterial physicMaterial;
 
     [Header("Dash Variables")]
     [SerializeField]
@@ -63,6 +62,7 @@ public class PlayerController : MonoBehaviour {
     private Vector2 minMaxHoldTime;
     private bool isButtonDown;
     public float interactInputTime; // How long the interact button has been held down
+
     private GameObject heldItem; // The item currently being held by the player
     public float maxThrowForce;
     public bool isInRangeOfObject;
@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour {
     [Header("Blocking Variables")]
     public GameObject shield;
     private bool isBlocking;
+
+    private bool isStrafing;
 
     [Header("Ladder Climbing Variables")]
     [SerializeField]
@@ -93,12 +95,19 @@ public class PlayerController : MonoBehaviour {
     public float invincibilityLength;
     private float invincibilityTimer;
 
-    // Private script variables
+    [Header("Explosion Power Up Variables")]
+    public bool explodeOnLand;
+    public float explosionRadius;
+    public float explosionForce;
+    public LayerMask enemyLayer;
+    public ParticleSystem[] ExplosionParticles;
+    public GameObject explosionLight;
+
+    // Extra private script variables
     private Throwable throwable;
     private PlayerHealth health;
-
-    List<Vector3> lineResults = new List<Vector3>();
-
+    private CameraShake cameraShake;
+    private PauseMenu pauseMenu;
 
     private void Awake() {
         playerState = playerMode.move;
@@ -117,6 +126,9 @@ public class PlayerController : MonoBehaviour {
         health = GetComponent<PlayerHealth>();
         rb.maxAngularVelocity = 15;
         name = "Player" + playerManager.numberOfPlayers;
+        physicMaterial = GetComponent<CapsuleCollider>().material;
+        cameraShake = Camera.main.GetComponent<CameraShake>();
+        pauseMenu = GameObject.FindGameObjectWithTag("Pause").GetComponent<PauseMenu>();
     }
 
     public void ResetPlayerVariables() {
@@ -134,30 +146,30 @@ public class PlayerController : MonoBehaviour {
             playerManager.players.Add(this.gameObject);
             mesh.material.color = playerManager.playerColors[playerManager.numberOfPlayers - 1];
             trailRenderer.material.color = playerManager.playerColors[playerManager.numberOfPlayers - 1];
-        }
-        //transform.position = new Vector3(0, 1.25f, -8.25f);
-
-        switch (playerManager.currentLevel) {
-            case (PlayerManager.level.Lobby):
-                SetPlayerPosition(playerManager.playerPositionsLobby);
-                break;
-            case (PlayerManager.level.Level1):
-                SetPlayerPosition(playerManager.playerPositionsLev1);
-                break;
-            case (PlayerManager.level.Level2):
-                SetPlayerPosition(playerManager.playerPositionsLev2);
-                break;
+            SetPlayerPosition(playerManager.playerPositionsLobby);
+            switch (playerManager.currentLevel) {
+                case (PlayerManager.level.Lobby):
+                    break;
+                case (PlayerManager.level.Level1):
+                    SpawnPlayerInactive();
+                    break;
+                case (PlayerManager.level.Level2):
+                    SpawnPlayerInactive();
+                    break;
+                case (PlayerManager.level.Level3):
+                    SpawnPlayerInactive();
+                    break;
+            }
         }
     }
 
     void SetPlayerPosition(Vector3[] playerPositions) {
-        for (int i = 0; i < playerManager.numberOfPlayers; i++) {
-            if(i == playerManager.numberOfPlayers) {
-                GetComponent<PlayerController>().ResetPlayerVariables();
-                transform.position = playerPositions[i];
-            }
+        transform.position = playerPositions[playerManager.numberOfPlayers - 1];
+    }
 
-        }
+    void SpawnPlayerInactive() {
+        health.isDead = true;
+        playerManager.ChangeNumberOfActivePlayers(-1);
     }
 
     void OnEnable() {
@@ -165,6 +177,7 @@ public class PlayerController : MonoBehaviour {
         playerInput.Controller.Interact.Enable();
         playerInput.Controller.Dash.Enable();
         playerInput.Controller.Block.Enable();
+        // playerInput.Controller.Strafe.Enable();
         playerManager.ChangeNumberOfActivePlayers(+1);
     }
 
@@ -173,6 +186,7 @@ public class PlayerController : MonoBehaviour {
         playerInput.Controller.Interact.Disable();
         playerInput.Controller.Dash.Disable();
         playerInput.Controller.Block.Disable();
+        // playerInput.Controller.Strafe.Enable();
         playerManager.ChangeNumberOfActivePlayers(-1);
     }
 
@@ -196,7 +210,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         // Rumble the controllers when holding the button down
-        if (interactInputTime >= 0.98) {
+        if (interactInputTime >= 0.98 && !health.isDead) {
             Gamepad.current.SetMotorSpeeds(0.015f, 0.015f);
         } else {
             Gamepad.current.SetMotorSpeeds(0f, 0f);
@@ -221,6 +235,11 @@ public class PlayerController : MonoBehaviour {
 
         invincibilityTimer -= Time.deltaTime;
 
+        if(playerState == playerMode.beingThrown) {
+            physicMaterial.dynamicFriction = 0.5f;
+        } else {
+            physicMaterial.dynamicFriction = 0.1f;
+        }
     }
 
 
@@ -260,6 +279,28 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void Strafe (InputAction.CallbackContext context) {
+        if (context.performed) {
+            isStrafing = true;
+        } else if (context.canceled) {
+            isStrafing = false;
+        }
+    }
+
+    public void PauseGame(InputAction.CallbackContext context) {
+        if (context.performed) {
+            pauseMenu.PauseTheGame();
+        }
+    }
+
+    public void AnyButtonPressed(InputAction.CallbackContext context) {
+        if (playerManager.GetIsGameOver()) {
+            if (context.performed) {
+                SceneManager.LoadScene(0);
+            }
+        }
+    }
+
     private void PlayerControls() {
         if (playerState == playerMode.move) {
             // Get a variable to be the difference between our current velocity and the max speed
@@ -275,7 +316,7 @@ public class PlayerController : MonoBehaviour {
             if (!isDashing) {
                 rb.velocity = move;
 
-                if (!isBlocking) {
+                if (!isBlocking && !isStrafing) {
                     if (move.x != 0 && move.z != 0) {
                         Vector3 LookDirection = new Vector3(moveInput.x * xVel, 0, moveInput.y * zVel) * Time.deltaTime;
                         Quaternion targetRotation = Quaternion.LookRotation(LookDirection, Vector3.up);
@@ -516,14 +557,14 @@ public class PlayerController : MonoBehaviour {
         isHoldingItem = false;
     }
 
-    public void RaiseShield() {
+    void RaiseShield() {
         // Reduce the players move speed, and activate their shield object
         maxSpeed = slowedSpeed;
         shield.SetActive(true);
         isBlocking = true;
     }
 
-    public void LowerShield() {
+    void LowerShield() {
         // Return the players move speed, and de-activate their shield object
         maxSpeed = originalMaxSpeed;
         shield.SetActive(false);
@@ -583,7 +624,32 @@ public class PlayerController : MonoBehaviour {
         canControl = trueOrFalse;
     }
 
+    void TriggerExplosion() {
+        explodeOnLand = false;
+        SpawnExplosionParticles();
+        cameraShake.ShakeCamera(1f);
+        Vector3 explosionPos = transform.position;
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, enemyLayer);
+        foreach (Collider hit in colliders) {
+            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
+            enemy.KnockBackEnemy(throwable, this, 0f, true);
+
+        }
+        GetComponent<PowerUp>().SetPowerUpActive(false);
+
+    }
+
+    void SpawnExplosionParticles() {
+        foreach(ParticleSystem particle in ExplosionParticles) {
+            ParticleSystem newExplosion = Instantiate(particle, transform.position, Quaternion.identity); 
+        }
+        GameObject explosionFlash = Instantiate(explosionLight, transform.position, Quaternion.identity);
+    }
+
     private void OnCollisionEnter(Collision collision) {
+        if(playerState == playerMode.beingThrown && explodeOnLand) {
+            TriggerExplosion();
+        }
         if (collision.gameObject.tag == "Ladder" && isInRangeOfLadder) {
             if (playerState == playerMode.move && !isDashing && !isHoldingItem && !isBlocking) {
                 isInRangeOfLadder = false;
@@ -621,9 +687,15 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (other.tag == "Enemy") {
+            if (playerState == playerMode.beingThrown && explodeOnLand) {
+                TriggerExplosion();
+            }
+
             if ((playerState != playerMode.beingThrown || !throwable.isBeingThrown) && invincibilityTimer < 0) {
                 // If the player collides with an enemy, generate a knock back force 
                 Vector3 knockBackAngle = new Vector3(transform.position.x, 0f, transform.position.z) - new Vector3(other.transform.position.x, 0f, other.transform.position.z);
+                transform.rotation = Quaternion.Inverse(transform.rotation);
+                PlaceObjectOnFloor();
 
                 if (playerState == playerMode.onLadder) {
                     // If the player is on a ladder, change the knockback angle
