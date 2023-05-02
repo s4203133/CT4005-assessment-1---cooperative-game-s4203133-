@@ -899,7 +899,7 @@ MonoBehaviour:
   - {fileID: 1488647081}
   allEnemies: []
   enemyObject: {fileID: 382778131}
-  spawnDelay: 7
+  spawnDelay: 8
   startDelay: 3
   spawnInGroups: 1
   groupSizeRange: {x: 3, y: 5}
@@ -2401,7 +2401,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223575715}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9f86a500385f58a419376bf9b0ad0638, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -20676,7 +20676,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh227114
+  m_Name: pb_Mesh276392
   serializedVersion: 11
   m_SubMeshes: []
   m_Shapes:
