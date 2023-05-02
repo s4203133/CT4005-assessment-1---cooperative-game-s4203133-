@@ -69,17 +69,16 @@ public class EnemySpawner : MonoBehaviour
                     if(numberOfEnemiesSpawned >= numberOfEnemiesToSpawn) {
                         yield break;
                     }
-                    yield return new WaitForSeconds(spawnDelay);
-
                     SpawnEnemy();
+                    yield return new WaitForSeconds(spawnDelay);
                 }
                 break;
             case(spawnTypes.spawnSetNumberOfWaves):
                 
                 for (int i = 0; i < numberOfWavesToSpawn; i++) {
-                    yield return new WaitForSeconds(spawnDelay);
                     SpawnEnemy();
                     numberOfWavesSpawned++;
+                    yield return new WaitForSeconds(spawnDelay);
                 }
                 break;
             case (spawnTypes.spawnUntilTimeRunsOut):
@@ -88,8 +87,9 @@ public class EnemySpawner : MonoBehaviour
                     if (timer <= spawnDelay) {
                         yield break;
                     } else {
-                        yield return new WaitForSeconds(spawnDelay);
                         SpawnEnemy();
+                        yield return new WaitForSeconds(spawnDelay);
+
                     }
                 }
                 break;
