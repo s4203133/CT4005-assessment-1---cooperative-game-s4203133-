@@ -5,13 +5,27 @@ using UnityEngine;
 public class UI : MonoBehaviour
 {
     [SerializeField]
-    private GameObject player1Health;
+    private GameObject player1HealthBar;
     [SerializeField]
-    private GameObject player2Health;
+    private GameObject player2HealthBar;
     [SerializeField]
-    private GameObject player3Health;
+    private GameObject player3HealthBar;
     [SerializeField]
-    private GameObject player4Health;
+    private GameObject player4HealthBar;
+
+    [SerializeField]
+    private GameObject player1PowerUpTimer;
+    [SerializeField]
+    private GameObject player2PowerUpTimer;
+    [SerializeField]
+    private GameObject player3PowerUpTimer;
+    [SerializeField]
+    private GameObject player4PowerUpTimer;
+
+    private PlayerHealth player1Health;
+    private PlayerHealth player2Health;
+    private PlayerHealth player3Health;
+    private PlayerHealth player4Health;
 
     // Start is called before the first frame update
     void Start()
