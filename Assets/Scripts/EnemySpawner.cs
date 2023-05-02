@@ -16,6 +16,7 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField]
     private GameObject[] spawnPoints;
+    public List<GameObject> allEnemies;
 
     public GameObject enemyObject;
     public float spawnDelay;
@@ -28,8 +29,8 @@ public class EnemySpawner : MonoBehaviour
     private int numberOfWavesSpawned;
 
     [Header("SpawnMode Variables")]
-    [Tooltip("Assign either the number of enmies to spawn, waves to spawn, or the length of the timer per level in the corresponding indexes -\nElement 0 = Lobby \nElement 1 = Level 1 \nElement 2 = Level 2 \nElement 3 = Level 3 \nElement 4 = Boss")]
-    public int[] amountPerLevel;
+    [Tooltip("Assign either the number of enmies to spawn, waves to spawn, or the length of the timer per level in the corresponding indexes -\0 = Lobby \n1 = Level 1 \n2 = Level 2 \n3 = Level 3 \n4 = Boss")]
+    public int[] enemiesToSpawnPerPlayer;
     private int numberOfEnemiesToSpawn;
     private int numberOfWavesToSpawn;
     private float timer;
@@ -37,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnEnemies());
+        allEnemies = new List<GameObject>();
     }
 
     private void Update() {
@@ -51,10 +52,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void PrepareToSpawn(int level) {
-        numberOfEnemiesToSpawn = amountPerLevel[level];
-        numberOfWavesToSpawn = amountPerLevel[level];
-        timer = amountPerLevel[level];
+    public void PrepareToSpawn(int level, int numberOfPlayers) {
+        enemiesToSpawnPerPlayer[level] *= numberOfPlayers;
+        numberOfEnemiesToSpawn = enemiesToSpawnPerPlayer[level];
+        numberOfWavesToSpawn = enemiesToSpawnPerPlayer[level];
+        timer = enemiesToSpawnPerPlayer[level];
     }
 
     public IEnumerator SpawnEnemies() {
@@ -100,6 +102,7 @@ public class EnemySpawner : MonoBehaviour
             int spawnPoint = Random.Range(0, spawnPoints.Length);
             GameObject newEnemy = Instantiate(enemyObject, spawnPoints[spawnPoint].transform.position, Quaternion.identity);
             numberOfEnemiesSpawned++;
+            allEnemies.Add(newEnemy);
         } else {
             // Generate a random amount of enemies to spawn in one group
             int amountToSpawn = Random.Range((int)groupSizeRange.x, (int)groupSizeRange.y);
@@ -112,6 +115,7 @@ public class EnemySpawner : MonoBehaviour
                 }
                 GameObject newEnemy = Instantiate(enemyObject, spawnPoints[spawnPoint].transform.position, Quaternion.identity);
                 numberOfEnemiesSpawned++;
+                allEnemies.Add(newEnemy);
             }
 
         }

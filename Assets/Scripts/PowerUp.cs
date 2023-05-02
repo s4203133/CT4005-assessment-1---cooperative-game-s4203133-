@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour {
-    private enum PowerUpTypes {
+    public enum PowerUpTypes {
         health,
         helmet,
         bomb,
         chicken,
     }
 
-    [SerializeField]
-    private PowerUpTypes PowerUpType;
+    public PowerUpTypes ActivatedPowerUp;
 
     [SerializeField]
     private float powerUpLength;
@@ -19,44 +19,93 @@ public class PowerUp : MonoBehaviour {
 
     private bool powerUpActive;
 
+    private PlayerController playerController;
+    private PlayerManager playerManager;
+    private PlayerHealth health;
+    private EnemySpawner enemySpawner;
+
+    public bool isAChicken;
+
+    private void Start() {
+        playerController = GetComponent<PlayerController>();
+        playerManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerManager>();
+        health = GetComponent<PlayerHealth>();
+        enemySpawner = GameObject.FindGameObjectWithTag("Enemy Spawner").GetComponent<EnemySpawner>();
+    }
+
     // Update is called once per frame
     void Update() {
         if (powerUpActive) {
             timer -= Time.deltaTime;
             if (timer <= 0) {
-                timer = powerUpLength;
-                powerUpActive = false;
+                DeActivatePowerUp();
             }
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") {
-            PlayerController player = other.GetComponent<PlayerController>();
-            switch (PowerUpType) {
-                case (PowerUpTypes.health):
-                    PlayerHealth health = other.GetComponent<PlayerHealth>();
-                    health.IncreaseHealth(25);
-                    Debug.Log("Increased Health");
-                    break;
-                case (PowerUpTypes.helmet):
-                    ActivatePowerUp();
-                    Debug.Log("Aquired Helmet");
-                    break;
-                case (PowerUpTypes.bomb):
-                    ActivatePowerUp();
-                    Debug.Log("Aquired Bomb");
-                    break;
-                case (PowerUpTypes.chicken):
-                    ActivatePowerUp();
-                    Debug.Log("Became a chicken");
-                    break;
-            }
+    public void ActivatePowerUp(PowerUpTypes type, GameObject powerUpObject) {
+        if (powerUpActive) {
+            return;
         }
-    }
 
-    void ActivatePowerUp() {
+        Destroy(powerUpObject);
+
+        ActivatedPowerUp = type;
+        
+        if(ActivatedPowerUp == PowerUpTypes.health) {
+            health.IncreaseHealth(25);
+            return;
+        }
+
+        switch (ActivatedPowerUp) {
+            case (PowerUpTypes.helmet):
+                playerManager.helmetPowerUpInLevel = true;
+                health.SetIsProtected(true);
+                break;
+            case (PowerUpTypes.bomb):
+                playerManager.bombPowerUpInLevel = true;
+                playerController.explodeOnLand = true;
+                break;
+            case (PowerUpTypes.chicken):
+                foreach(GameObject enemy in enemySpawner.allEnemies){
+                    enemy.GetComponent<EnemyPatrol>().AssignSpecificTarget(this.gameObject);
+                }
+                isAChicken = true;
+                playerManager.chickenPowerUpInLevel = true;
+                break;
+        }
+
         timer = powerUpLength;
         powerUpActive = true;
+
+    }
+
+    void DeActivatePowerUp() {
+        timer = powerUpLength;
+        powerUpActive = false;
+        switch (ActivatedPowerUp) {
+            case (PowerUpTypes.helmet):
+                health.SetIsProtected(false);
+                playerManager.helmetPowerUpInLevel = false;
+                break;
+            case (PowerUpTypes.bomb):
+                playerController.explodeOnLand = false;
+                playerManager.bombPowerUpInLevel = false;
+                break;
+            case (PowerUpTypes.chicken):
+                playerManager.chickenPowerUpInLevel = false;
+                isAChicken = false;
+                // Set the enemies to lock onto a new random target
+                foreach (GameObject enemy in enemySpawner.allEnemies) {
+                    EnemyPatrol enemyAgent = enemy.GetComponent<EnemyPatrol>();
+                    enemyAgent.target = null;
+                    enemyAgent.target = enemyAgent.AssignNewTarget();
+                }
+                break;
+        }
+    }
+
+    public void SetPowerUpActive(bool value) {
+        powerUpActive = value;
     }
 }

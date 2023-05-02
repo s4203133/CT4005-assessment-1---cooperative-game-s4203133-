@@ -27,6 +27,7 @@ public class PlayerManager : MonoBehaviour
 
     private PlayerInputManager inputManager;
     private EnemySpawner enemySpawner;
+    private GameOver gameOver;
     private Camera cam;
 
     public int playersReadyToStart;
@@ -54,18 +55,40 @@ public class PlayerManager : MonoBehaviour
     public Vector3 cameraPositionBoss;
     public Vector3[] playerPositionsBoss;
 
+    public bool helmetPowerUpInLevel, bombPowerUpInLevel, chickenPowerUpInLevel;
+
+    private bool isGameOver;
+
     // Start is called before the first frame update
     void Start()
     {
         currentLevel = level.Lobby;
         players = new List <GameObject>();
         inputManager = GetComponent<PlayerInputManager>();
+        gameOver = GameObject.FindGameObjectWithTag("Finish").GetComponent<GameOver>();
         cam = Camera.main;
         enemySpawner = FindObjectOfType<EnemySpawner>();
-        enemySpawner.PrepareToSpawn(0);
+        enemySpawner.PrepareToSpawn(0, numberOfPlayers);
     }
 
     private void Update() {
+        if (numberOfActivePlayers == 0) {
+            switch (currentLevel) {
+                case (level.Level1):
+                    gameOver.EndGame();
+                    break;
+                case (level.Level2):
+                    gameOver.EndGame();
+                    break;
+                case (level.Level3):
+                    gameOver.EndGame();
+                    break;
+                case (level.Boss):
+
+                    break;
+            }
+        }
+
         if((playersReadyToStart == numberOfPlayersToProgress) && players.Count > 0) {
             levelStartCounter += Time.deltaTime;
         } else {
@@ -79,42 +102,39 @@ public class PlayerManager : MonoBehaviour
         }
 
         if(levelStartCounter > timeToStartLevel && numberOfEnemiesKilled == enemySpawner.numberOfEnemiesSpawned) {
-            /*for(int i = 0; i < numberOfPlayers; i++) {
-                players[i].SetActive(false);
-            }*/
             switch (currentLevel) {
                 case (level.Lobby):
                     ChangeLevel(cameraPositionLev1, playerPositionsLev1);
                     numberOfPlayersToProgress = playersToStartLevel1;
                     currentLevel = level.Level1;
-                    enemySpawner.PrepareToSpawn(1);
+                    enemySpawner.PrepareToSpawn(1, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Level1):
                     ChangeLevel(cameraPositionLev2, playerPositionsLev2);
                     numberOfPlayersToProgress = playersToStartLevel2;
                     currentLevel = level.Level2;
-                    enemySpawner.PrepareToSpawn(2);
+                    enemySpawner.PrepareToSpawn(2, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Level2):
                     ChangeLevel(cameraPositionLev3, playerPositionsLev3);
                     numberOfPlayersToProgress = playersToStartLevel3;
                     currentLevel = level.Level3;
-                    enemySpawner.PrepareToSpawn(3);
+                    enemySpawner.PrepareToSpawn(3, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Level3):
                     ChangeLevel(cameraPositionBoss, playerPositionsBoss);
                     numberOfPlayersToProgress = playersToStartBoss;
                     currentLevel = level.Boss;
-                    enemySpawner.PrepareToSpawn(4);
+                    enemySpawner.PrepareToSpawn(4, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Boss):
                     ChangeLevel(cameraPositionLobby, playerPositionsLobby);
                     currentLevel = level.Lobby;
-                    enemySpawner.PrepareToSpawn(5);
+                    enemySpawner.PrepareToSpawn(5, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
             }
@@ -132,8 +152,14 @@ public class PlayerManager : MonoBehaviour
         cam.transform.position = cameraPosition;
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].GetComponent<PlayerController>().ResetPlayerVariables();
+            PlayerHealth playerHealth = players[i].GetComponent<PlayerHealth>();
             players[i].transform.position = playerPositions[i];
             players[i].SetActive(true);
+            if (playerHealth.isDead) {
+                playerHealth.isDead = false;
+                ChangeNumberOfActivePlayers(1);
+                playerHealth.SetHealthToMax();
+            }
         }
     }
 
@@ -143,5 +169,13 @@ public class PlayerManager : MonoBehaviour
 
     public int GetNumberOfActivePlayers() {
         return numberOfActivePlayers;
+    }
+
+    public bool GetIsGameOver() {
+        return isGameOver;
+    }
+
+    public void SetIsGameOver(bool value) {
+        isGameOver = value;
     }
 }

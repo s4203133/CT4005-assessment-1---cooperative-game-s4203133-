@@ -1,5 +1,6 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Throwable : MonoBehaviour
@@ -9,22 +10,27 @@ public class Throwable : MonoBehaviour
     public bool hitSpring;
 
     private PlayerController player;
+    private PlayerManager playerManager;
+    private PlayerHealth playerHealth;
     private Rigidbody rb;
 
     public float damage;
     private float originalDamage;
     public Vector3 thrownDirection;
 
-    int numberOfGroundHits;
+    private CameraShake cameraShake;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerController>();
+        playerManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerManager>();
+        playerHealth = GetComponent<PlayerHealth>();
         isBeingThrown = false;
         hasHitSomething = false;
         originalDamage = damage;
+        cameraShake = Camera.main.GetComponent<CameraShake>();
     }
 
     private void Update() {
@@ -34,7 +40,6 @@ public class Throwable : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision) {
-        numberOfGroundHits++;
         if (isBeingThrown && !hitSpring) {
             hasHitSomething = true;
             StartCoroutine(ReturnControls(0.85f));
@@ -60,11 +65,18 @@ public class Throwable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Catcher") {
-            transform.position = new Vector3(0, 10, 0);
-            rb.velocity = Vector3.zero;
-            transform.rotation = Quaternion.Euler(Vector3.zero);
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            return;
+            if (playerManager.currentLevel == PlayerManager.level.Lobby) {
+                transform.position = new Vector3(0, 10, 0);
+                rb.velocity = Vector3.zero;
+                transform.rotation = Quaternion.Euler(Vector3.zero);
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                return;
+            } else {
+                if(playerHealth != null) {
+                    playerHealth.DisablePlayer();
+                }
+                return;
+            }
         }
         hasHitSomething = true;
 
@@ -72,20 +84,14 @@ public class Throwable : MonoBehaviour
             return;
         }
 
+        // If the player hits something while being thrown
         if (isBeingThrown || (player != null && player.playerState == PlayerController.playerMode.beingThrown)) {
             if (other.tag == "Enemy") {
-                EnemyHealth enemy = other.GetComponent<EnemyHealth>();
-                rb.velocity *= 0.25f;
-
-                if(player!= null) {
-                    player.SetInvincibilityTimer(1.1f);
-                }
-                if (enemy.knockBackTimer < 0) {
-                    enemy.knockBackForce = thrownDirection * enemy.knockBackMultiplyer;
-                    enemy.GetComponent<Rigidbody>().isKinematic = false;
-                    enemy.knockBackTimer = enemy.knockBackLength;
-                    enemy.health -= damage;
-                }
+                float cameraShakeMagnitude = (damage * (100/originalDamage)) / 100;
+                cameraShake.ShakeCamera(cameraShakeMagnitude);
+                EnemyHealth hitEnemy = other.GetComponent<EnemyHealth>();
+                hitEnemy.SetObjectHitBy(this.gameObject);
+                hitEnemy.KnockBackEnemy(this, player, 1.1f, true);
             }
 
             if (other.tag == "Spring") {
@@ -93,6 +99,7 @@ public class Throwable : MonoBehaviour
                 Spring spring = other.GetComponent<Spring>();
                 if (spring != null) {
                     spring.LaunchPlayer(this.gameObject);
+                    cameraShake.ShakeCamera(0.4f);
                 }
             }
 
