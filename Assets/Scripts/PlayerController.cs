@@ -125,7 +125,6 @@ public class PlayerController : MonoBehaviour {
         throwable = GetComponent<Throwable>();
         health = GetComponent<PlayerHealth>();
         rb.maxAngularVelocity = 15;
-        name = "Player" + playerManager.numberOfPlayers;
         physicMaterial = GetComponent<CapsuleCollider>().material;
         cameraShake = Camera.main.GetComponent<CameraShake>();
         pauseMenu = GameObject.FindGameObjectWithTag("Pause").GetComponent<PauseMenu>();
@@ -143,6 +142,7 @@ public class PlayerController : MonoBehaviour {
     private void Start() {
         if(playerManager != null) {
             playerManager.numberOfPlayers++;
+            name = "Player" + playerManager.numberOfPlayers;
             playerManager.players.Add(this.gameObject);
             mesh.material.color = playerManager.playerColors[playerManager.numberOfPlayers - 1];
             trailRenderer.material.color = playerManager.playerColors[playerManager.numberOfPlayers - 1];
