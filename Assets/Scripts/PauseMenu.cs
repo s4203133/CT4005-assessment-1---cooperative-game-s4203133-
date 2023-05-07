@@ -9,9 +9,9 @@ public class PauseMenu : MonoBehaviour {
     private PlayerInput menuInput;
 
     public Button resumeButton;
-    public Animator resumeButtonAnim;
+    //public Animator resumeButtonAnim;
     public Button quitButton;
-    public Animator quitButtonAnim;
+    //public Animator quitButtonAnim;
 
     public GameObject pauseMenuScreen;
 
@@ -37,8 +37,8 @@ public class PauseMenu : MonoBehaviour {
     }
 
     void SetButtonAnimations(bool resumeHighlighted, bool quitHighlighted) {
-        resumeButtonAnim.SetBool("Highlighted", resumeHighlighted);
-        quitButtonAnim.SetBool("Highlighted", quitHighlighted);
+        //resumeButtonAnim.SetBool("Highlighted", resumeHighlighted);
+        //quitButtonAnim.SetBool("Highlighted", quitHighlighted);
 
     }
 
