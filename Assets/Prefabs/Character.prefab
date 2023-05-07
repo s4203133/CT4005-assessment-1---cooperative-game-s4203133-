@@ -960,6 +960,18 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 1d093ba1-9e9b-4518-bc45-c93fc47a82ea
     m_ActionName: Controller/Dismount[/SwitchProControllerHID/buttonNorth,/XInputControllerWindows/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1b29710b-1b02-4801-8e23-9a092f801de3
+    m_ActionName: MainMenu/MoveDown[/SwitchProControllerHID/leftStick/down,/SwitchProControllerHID/dpad/down]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 18206392-b90f-4ba8-a4d8-97e5f0e79209
+    m_ActionName: MainMenu/MoveUp[/SwitchProControllerHID/dpad/up,/SwitchProControllerHID/leftStick/up]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4fb8366a-a5e1-42ab-bbaf-85065358f410
+    m_ActionName: MainMenu/Select[/SwitchProControllerHID/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Controller

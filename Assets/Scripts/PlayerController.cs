@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
@@ -133,15 +133,6 @@ public class PlayerController : MonoBehaviour {
         pauseMenu = GameObject.FindGameObjectWithTag("Pause").GetComponent<PauseMenu>();
     }
 
-    public void ResetPlayerVariables() {
-        canControl = true;
-        isBeingHeld = false;
-        canDash = true;
-        health.SetHealthToMax();
-        PlaceObjectOnFloor();
-        playerState = playerMode.move;
-    }
-
     private void Start() {
         if(playerManager != null) {
             playerManager.numberOfPlayers++;
@@ -166,6 +157,15 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void ResetPlayerVariables() {
+        canControl = true;
+        isBeingHeld = false;
+        canDash = true;
+        health.SetHealthToMax();
+        PlaceObjectOnFloor();
+        playerState = playerMode.move;
+    }
+
     void SetPlayerPosition(Vector3[] playerPositions) {
         transform.position = playerPositions[playerManager.numberOfPlayers - 1];
     }
@@ -176,12 +176,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     void OnEnable() {
+        EnableControls();
+        playerManager.ChangeNumberOfActivePlayers(+1);
+    }
+
+    void EnableControls() {
         playerInput.Controller.Move.Enable();
         playerInput.Controller.Interact.Enable();
         playerInput.Controller.Dash.Enable();
         playerInput.Controller.Block.Enable();
-        // playerInput.Controller.Strafe.Enable();
-        playerManager.ChangeNumberOfActivePlayers(+1);
+        playerInput.Controller.Enable();
     }
 
     void OnDisable() {
@@ -294,7 +298,11 @@ public class PlayerController : MonoBehaviour {
 
     public void PauseGame(InputAction.CallbackContext context) {
         if (context.performed) {
-            pauseMenu.PauseTheGame();
+            if (pauseMenu.IsTheGamePaused()) {
+                pauseMenu.ResumeGame();
+            } else {
+                pauseMenu.PauseTheGame();
+            }
         }
     }
 
