@@ -14,8 +14,10 @@ public class EnemySpawner : MonoBehaviour
 
     public spawnTypes spawnMode;
 
+    private float levelToSpawnAt;
+
     [SerializeField]
-    private GameObject[] spawnPoints;
+    private GameObject[] spawnPointsLevel1, spawnPointsLevel2, spawnPointsLevel3;
     public List<GameObject> allEnemies;
 
     public GameObject enemyObject;
@@ -53,10 +55,12 @@ public class EnemySpawner : MonoBehaviour
     }
 
     public void PrepareToSpawn(int level, int numberOfPlayers) {
+        numberOfEnemiesSpawned = 0;
         enemiesToSpawnPerPlayer[level] *= numberOfPlayers;
         numberOfEnemiesToSpawn = enemiesToSpawnPerPlayer[level];
         numberOfWavesToSpawn = enemiesToSpawnPerPlayer[level];
         timer = enemiesToSpawnPerPlayer[level];
+        levelToSpawnAt = level;
     }
 
     public IEnumerator SpawnEnemies() {
@@ -64,6 +68,7 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitForSeconds(startDelay);
         // Check which spawn mode is selected, and spawn the enemies accordingly
         switch (spawnMode) {
+            // Spawns a specific amount of enemies in the level
             case (spawnTypes.spawnSetNumberOfEnemies):
                 for (int i = 0; i < numberOfEnemiesToSpawn; i++) {
                     if(numberOfEnemiesSpawned >= numberOfEnemiesToSpawn) {
@@ -73,6 +78,7 @@ public class EnemySpawner : MonoBehaviour
                     yield return new WaitForSeconds(spawnDelay);
                 }
                 break;
+            // Spawns a specific amount of waves of enemies (useful when spawning in groups)
             case(spawnTypes.spawnSetNumberOfWaves):
                 
                 for (int i = 0; i < numberOfWavesToSpawn; i++) {
@@ -81,6 +87,7 @@ public class EnemySpawner : MonoBehaviour
                     yield return new WaitForSeconds(spawnDelay);
                 }
                 break;
+            // Keep spawning enemies until a timer runs out
             case (spawnTypes.spawnUntilTimeRunsOut):
                 // Used a large for loop because it needs to run until the timer runs out, and then break
                 for (int i = 0; i < 100; i++) {
@@ -89,7 +96,6 @@ public class EnemySpawner : MonoBehaviour
                     } else {
                         SpawnEnemy();
                         yield return new WaitForSeconds(spawnDelay);
-
                     }
                 }
                 break;
@@ -99,26 +105,39 @@ public class EnemySpawner : MonoBehaviour
     void SpawnEnemy() {
         if (!spawnInGroups) {
             // Select one of the spawn points in the level at random to place the enemies
-            int spawnPoint = Random.Range(0, spawnPoints.Length);
-            GameObject newEnemy = Instantiate(enemyObject, spawnPoints[spawnPoint].transform.position, Quaternion.identity);
+            GameObject newEnemy = Instantiate(enemyObject, GetRandomSpawnPoint().position, Quaternion.identity);
             numberOfEnemiesSpawned++;
             allEnemies.Add(newEnemy);
         } else {
             // Generate a random amount of enemies to spawn in one group
             int amountToSpawn = Random.Range((int)groupSizeRange.x, (int)groupSizeRange.y);
-            int spawnPoint = Random.Range(0, spawnPoints.Length);
      
             for (int i = 0; i < amountToSpawn; i++) {
                 // If the game has already spawned the desired amount of enemies, break out of the loop
                 if(numberOfEnemiesSpawned >= numberOfEnemiesToSpawn) {
                     return;
                 }
-                GameObject newEnemy = Instantiate(enemyObject, spawnPoints[spawnPoint].transform.position, Quaternion.identity);
+                GameObject newEnemy = Instantiate(enemyObject, GetRandomSpawnPoint().position, Quaternion.identity);
                 numberOfEnemiesSpawned++;
                 allEnemies.Add(newEnemy);
             }
 
         }
 
+    }
+
+    Transform GetRandomSpawnPoint() {
+        int spawnPoint;
+        if(levelToSpawnAt == 1) {
+            spawnPoint = Random.Range(0, spawnPointsLevel1.Length);
+            return spawnPointsLevel1[spawnPoint].transform;
+        } else if(levelToSpawnAt == 2) {
+            spawnPoint = Random.Range(0, spawnPointsLevel2.Length);
+            return spawnPointsLevel2[spawnPoint].transform;
+        } else if(levelToSpawnAt == 3) {
+            spawnPoint = Random.Range(0, spawnPointsLevel3.Length);
+            return spawnPointsLevel3[spawnPoint].transform;
+        }
+        return transform;
     }
 }

@@ -113,6 +113,7 @@ public class PlayerManager : MonoBehaviour
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Level1):
+                    StopCoroutine(enemySpawner.SpawnEnemies());
                     ChangeLevel(cameraPositionLev2, playerPositionsLev2);
                     numberOfPlayersToProgress = playersToStartLevel2;
                     currentLevel = level.Level2;
@@ -120,6 +121,7 @@ public class PlayerManager : MonoBehaviour
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Level2):
+                    StopCoroutine(enemySpawner.SpawnEnemies());
                     ChangeLevel(cameraPositionLev3, playerPositionsLev3);
                     numberOfPlayersToProgress = playersToStartLevel3;
                     currentLevel = level.Level3;
@@ -127,6 +129,7 @@ public class PlayerManager : MonoBehaviour
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Level3):
+                    StopCoroutine(enemySpawner.SpawnEnemies());
                     ChangeLevel(cameraPositionBoss, playerPositionsBoss);
                     numberOfPlayersToProgress = playersToStartBoss;
                     currentLevel = level.Boss;
@@ -134,6 +137,7 @@ public class PlayerManager : MonoBehaviour
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Boss):
+                    StopCoroutine(enemySpawner.SpawnEnemies());
                     ChangeLevel(cameraPositionLobby, playerPositionsLobby);
                     currentLevel = level.Lobby;
                     enemySpawner.PrepareToSpawn(5, numberOfPlayers);
@@ -152,6 +156,7 @@ public class PlayerManager : MonoBehaviour
 
     private void ChangeLevel(Vector3 cameraPosition, Vector3[] playerPositions) {
         cam.transform.position = cameraPosition;
+        numberOfEnemiesKilled = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].GetComponent<PlayerController>().ResetPlayerVariables();
             PlayerHealth playerHealth = players[i].GetComponent<PlayerHealth>();
