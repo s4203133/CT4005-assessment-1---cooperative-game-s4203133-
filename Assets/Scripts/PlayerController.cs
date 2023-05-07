@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour {
     private float rotateSpeed;
     private Rigidbody rb;
     private PhysicMaterial physicMaterial;
+    private bool isGrounded;
+    public Transform groundCheck;
+    public LayerMask groundLayers;
 
     [Header("Dash Variables")]
     [SerializeField]
@@ -240,6 +243,8 @@ public class PlayerController : MonoBehaviour {
         } else {
             physicMaterial.dynamicFriction = 0.1f;
         }
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, groundLayers);
     }
 
 
@@ -290,6 +295,17 @@ public class PlayerController : MonoBehaviour {
     public void PauseGame(InputAction.CallbackContext context) {
         if (context.performed) {
             pauseMenu.PauseTheGame();
+        }
+    }
+
+    public void DismountFromPlayer(InputAction.CallbackContext context) {
+        if (context.performed) {
+            if(playerState == playerMode.beingHeld) {
+                PlayerController parentPlayer = transform.parent.GetComponent<PlayerController>();
+                if(parentPlayer != null) {
+                    parentPlayer.PlaceObjectOnFloor();
+                }
+            }
         }
     }
 
@@ -527,7 +543,7 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void PlaceObjectOnFloor() {
+    public void PlaceObjectOnFloor() {
         if (!isHoldingItem) {
             return;
         }
@@ -650,7 +666,7 @@ public class PlayerController : MonoBehaviour {
         if(playerState == playerMode.beingThrown && explodeOnLand) {
             TriggerExplosion();
         }
-        if (collision.gameObject.tag == "Ladder" && isInRangeOfLadder) {
+        if (collision.gameObject.tag == "Ladder" && isInRangeOfLadder && isGrounded) {
             if (playerState == playerMode.move && !isDashing && !isHoldingItem && !isBlocking) {
                 isInRangeOfLadder = false;
                 rb.useGravity = false;

@@ -60,6 +60,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Dismount",
+                    "type": "Button",
+                    "id": "1d093ba1-9e9b-4518-bc45-c93fc47a82ea",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "AnyButton",
                     "type": "Button",
                     "id": "8ac99054-c09c-4d06-9b87-7b229af24833",
@@ -287,6 +296,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "079b93f2-1c46-4e63-b7b9-d937380245b2",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dismount",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

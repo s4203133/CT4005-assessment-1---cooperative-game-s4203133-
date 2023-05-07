@@ -11,6 +11,13 @@ public class PlayerUI : MonoBehaviour {
     private Vector2 powerUpTimerScale;
 
     [Header("Throwing Bar Variables")]
+    public GameObject throwingArrow;
+    private Vector3 throwingArrowStartPosition;
+    [SerializeField]
+    private float throwingArrowExtendedDistance; // Max position on Z axis when extending forwards from input
+    private MeshRenderer throwingArrowMeshRenderer;
+
+    Color playerColor;
     /*public Image throwingBar;
     public Image throwingBarBackground;
     private float throwingBarWidth;
@@ -32,8 +39,10 @@ public class PlayerUI : MonoBehaviour {
         playerManager = FindObjectOfType<PlayerManager>();
         powerUp = GetComponent<PowerUp>();
         cam = Camera.main;
+        throwingArrowStartPosition = throwingArrow.transform.localPosition;
+        throwingArrowMeshRenderer = throwingArrow.GetComponent<MeshRenderer>();
 
-        Color playerColor = GetComponent<MeshRenderer>().material.color;
+        playerColor = GetComponent<MeshRenderer>().material.color;
         directionalArrow.GetComponent<MeshRenderer>().material.color = playerColor;
 
         switch (transform.name) {
@@ -76,6 +85,8 @@ public class PlayerUI : MonoBehaviour {
         //SetThrowingUIBar();
         
         HandleDirectionArrow();
+        ThrowningArrow();
+
     }
 
     void SetUIBarsVisible(bool visible) {
@@ -144,6 +155,22 @@ public class PlayerUI : MonoBehaviour {
             directionalArrow.SetActive(true);
         } else {
             directionalArrow.SetActive(false);
+        }
+    }
+
+    void ThrowningArrow() {
+        if(playerController.interactInputTime > 0.2) {
+            float extensionDistance = (playerController.interactInputTime * (throwingArrowExtendedDistance - throwingArrowStartPosition.z));
+            throwingArrow.transform.localPosition = new Vector3(throwingArrow.transform.localPosition.x, throwingArrow.transform.localPosition.y, throwingArrowStartPosition.z + extensionDistance);
+            if(playerController.interactInputTime >= 0.99) {
+                throwingArrowMeshRenderer.material.color = Color.white;
+            } else {
+                throwingArrowMeshRenderer.material.color = playerColor;
+            }
+        } else {
+            throwingArrow.transform.localPosition = throwingArrowStartPosition;
+            throwingArrowMeshRenderer.material.color = playerColor;
+
         }
     }
 }
