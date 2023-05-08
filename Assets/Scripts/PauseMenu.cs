@@ -101,6 +101,8 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public void ReturnToMenu() {
+        isPaused = false;
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 

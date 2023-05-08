@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 public class PlayerManager : MonoBehaviour
 {
     public enum level{ 
@@ -57,6 +58,13 @@ public class PlayerManager : MonoBehaviour
 
     public bool helmetPowerUpInLevel, bombPowerUpInLevel, chickenPowerUpInLevel;
 
+    public GameObject joinGamePrompt;
+    public GameObject loadingNextLevelText;
+    public Image loadingLevelBar;
+
+    public Image blackOverlay;
+    private bool loadingLevel;
+
     private bool isGameOver;
 
     // Start is called before the first frame update
@@ -69,6 +77,7 @@ public class PlayerManager : MonoBehaviour
         cam = Camera.main;
         enemySpawner = FindObjectOfType<EnemySpawner>();
         enemySpawner.PrepareToSpawn(0, numberOfPlayers);
+        FadeOutBlackScreen();
     }
 
     private void Update() {
@@ -89,15 +98,28 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if((playersReadyToStart == numberOfPlayersToProgress) && players.Count > 0) {
-            levelStartCounter += Time.deltaTime;
+        if((playersReadyToStart == numberOfPlayersToProgress) && players.Count > 0 && !loadingLevel) {
+            if(numberOfEnemiesKilled == enemySpawner.numberOfEnemiesSpawned) {
+                levelStartCounter += Time.deltaTime;
+                loadingNextLevelText.SetActive(true);
+                loadingLevelBar.rectTransform.localScale = new Vector2(levelStartCounter * (100 / timeToStartLevel) / 100, loadingLevelBar.rectTransform.localScale.y);
+                loadingLevelBar.enabled = true;
+            }
         } else {
             levelStartCounter = 0;
+            loadingNextLevelText.SetActive(false);
+            loadingLevelBar.enabled = false;
+            loadingLevelBar.rectTransform.localScale = new Vector2(0, loadingLevelBar.rectTransform.localScale.y);
         }
 
         // If in the lobby set number of players to start level the amount of players
-        if(currentLevel == level.Lobby) {
+        if (currentLevel == level.Lobby) {
             numberOfPlayersToProgress = players.Count;
+            if(players.Count < 4) {
+                joinGamePrompt.SetActive(true);
+            } else {
+                joinGamePrompt.SetActive(false);
+            }
         } // Otherwise set the amount of players required to start next level the amount of players still alive 
         else {
             numberOfPlayersToProgress = numberOfActivePlayers;
@@ -106,7 +128,8 @@ public class PlayerManager : MonoBehaviour
         if(levelStartCounter > timeToStartLevel && numberOfEnemiesKilled == enemySpawner.numberOfEnemiesSpawned) {
             switch (currentLevel) {
                 case (level.Lobby):
-                    ChangeLevel(cameraPositionLev1, playerPositionsLev1);
+                    joinGamePrompt.SetActive(false);
+                    StartCoroutine(ChangeLevel(cameraPositionLev1, playerPositionsLev1));
                     numberOfPlayersToProgress = playersToStartLevel1;
                     currentLevel = level.Level1;
                     enemySpawner.PrepareToSpawn(1, numberOfPlayers);
@@ -114,7 +137,7 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case (level.Level1):
                     StopCoroutine(enemySpawner.SpawnEnemies());
-                    ChangeLevel(cameraPositionLev2, playerPositionsLev2);
+                    StartCoroutine(ChangeLevel(cameraPositionLev2, playerPositionsLev2));
                     numberOfPlayersToProgress = playersToStartLevel2;
                     currentLevel = level.Level2;
                     enemySpawner.PrepareToSpawn(2, numberOfPlayers);
@@ -122,7 +145,7 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case (level.Level2):
                     StopCoroutine(enemySpawner.SpawnEnemies());
-                    ChangeLevel(cameraPositionLev3, playerPositionsLev3);
+                    StartCoroutine(ChangeLevel(cameraPositionLev3, playerPositionsLev3));
                     numberOfPlayersToProgress = playersToStartLevel3;
                     currentLevel = level.Level3;
                     enemySpawner.PrepareToSpawn(3, numberOfPlayers);
@@ -130,21 +153,18 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case (level.Level3):
                     StopCoroutine(enemySpawner.SpawnEnemies());
-                    ChangeLevel(cameraPositionBoss, playerPositionsBoss);
+                    StartCoroutine(ChangeLevel(cameraPositionBoss, playerPositionsBoss));
                     numberOfPlayersToProgress = playersToStartBoss;
                     currentLevel = level.Boss;
                     enemySpawner.PrepareToSpawn(4, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Boss):
-                    StopCoroutine(enemySpawner.SpawnEnemies());
-                    ChangeLevel(cameraPositionLobby, playerPositionsLobby);
+                    StartCoroutine(ChangeLevel(cameraPositionLobby, playerPositionsLobby));
                     currentLevel = level.Lobby;
-                    enemySpawner.PrepareToSpawn(5, numberOfPlayers);
-                    StartCoroutine(enemySpawner.SpawnEnemies());
+                    joinGamePrompt.SetActive(true);
                     break;
             }
-            levelStartCounter = 0;
         }
 
         if(inputManager != null) {
@@ -154,7 +174,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private void ChangeLevel(Vector3 cameraPosition, Vector3[] playerPositions) {
+    private IEnumerator ChangeLevel(Vector3 cameraPosition, Vector3[] playerPositions) {
+        loadingLevel = true;
+        blackOverlay.CrossFadeColor(Color.black, 1f, false, true);
+        yield return new WaitForSeconds(1f);
         cam.transform.position = cameraPosition;
         numberOfEnemiesKilled = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -168,6 +191,17 @@ public class PlayerManager : MonoBehaviour
                 playerHealth.SetHealthToMax();
             }
         }
+        levelStartCounter = 0;
+        loadingLevel = false;
+        FadeOutBlackScreen();
+    }
+
+    public void FadeInBlackScreen() {
+        blackOverlay.CrossFadeColor(Color.blue, 1f, false, true);
+    }
+
+    public void FadeOutBlackScreen() {
+        blackOverlay.CrossFadeColor(Color.clear, 1f, false, true);
     }
 
     public void ChangeNumberOfActivePlayers(int amount) {

@@ -21,6 +21,8 @@ public class mainmenu : MonoBehaviour
     public Button exitButton;
     public Animator exitButtonAnim;
 
+    public Image blackOverlay;
+
     public enum ButtonsToPress {
         play,
         options,
@@ -39,6 +41,8 @@ public class mainmenu : MonoBehaviour
         mainMenuInput.Enable();
         currentButton = ButtonsToPress.play;
         SetButtonAnimations(true, false, false, false);
+
+        FadeOutBlackScreen();
     }
 
     private void Update() {
@@ -104,7 +108,7 @@ public class mainmenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(1);
+        StartCoroutine(LoadLevel(1));
     }
 
     public void LoadOptions() {
@@ -112,12 +116,26 @@ public class mainmenu : MonoBehaviour
     }
 
     public void LoadTutorial() {
-        SceneManager.LoadScene(2);
+        StartCoroutine(LoadLevel(2));
     }
 
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private IEnumerator LoadLevel(int index) {
+        FadeInBlackScreen();
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(index);
+    }
+
+    public void FadeInBlackScreen() {
+        blackOverlay.CrossFadeColor(Color.blue, 1f, false, true);
+    }
+
+    public void FadeOutBlackScreen() {
+        blackOverlay.CrossFadeColor(Color.clear, 1f, false, true);
     }
 
 }

@@ -82,6 +82,15 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f34a647-5be5-4643-acd5-a41944fa56d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Dismount"",
                     ""type"": ""Button"",
                     ""id"": ""1d093ba1-9e9b-4518-bc45-c93fc47a82ea"",
@@ -331,6 +340,17 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                     ""action"": ""Dismount"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""612d965a-5532-4b1c-919b-5696c90df13a"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -435,6 +455,7 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
         m_Controller_Block = m_Controller.FindAction("Block", throwIfNotFound: true);
         m_Controller_Strafe = m_Controller.FindAction("Strafe", throwIfNotFound: true);
         m_Controller_Pause = m_Controller.FindAction("Pause", throwIfNotFound: true);
+        m_Controller_Exit = m_Controller.FindAction("Exit", throwIfNotFound: true);
         m_Controller_Dismount = m_Controller.FindAction("Dismount", throwIfNotFound: true);
         m_Controller_AnyButton = m_Controller.FindAction("AnyButton", throwIfNotFound: true);
         // Menu
@@ -507,6 +528,7 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
     private readonly InputAction m_Controller_Block;
     private readonly InputAction m_Controller_Strafe;
     private readonly InputAction m_Controller_Pause;
+    private readonly InputAction m_Controller_Exit;
     private readonly InputAction m_Controller_Dismount;
     private readonly InputAction m_Controller_AnyButton;
     public struct ControllerActions
@@ -519,6 +541,7 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
         public InputAction @Block => m_Wrapper.m_Controller_Block;
         public InputAction @Strafe => m_Wrapper.m_Controller_Strafe;
         public InputAction @Pause => m_Wrapper.m_Controller_Pause;
+        public InputAction @Exit => m_Wrapper.m_Controller_Exit;
         public InputAction @Dismount => m_Wrapper.m_Controller_Dismount;
         public InputAction @AnyButton => m_Wrapper.m_Controller_AnyButton;
         public InputActionMap Get() { return m_Wrapper.m_Controller; }
@@ -548,6 +571,9 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                 @Pause.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
+                @Exit.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnExit;
+                @Exit.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnExit;
+                @Exit.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnExit;
                 @Dismount.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnDismount;
                 @Dismount.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnDismount;
                 @Dismount.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnDismount;
@@ -576,6 +602,9 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Exit.started += instance.OnExit;
+                @Exit.performed += instance.OnExit;
+                @Exit.canceled += instance.OnExit;
                 @Dismount.started += instance.OnDismount;
                 @Dismount.performed += instance.OnDismount;
                 @Dismount.canceled += instance.OnDismount;
@@ -643,6 +672,7 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
         void OnBlock(InputAction.CallbackContext context);
         void OnStrafe(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
         void OnDismount(InputAction.CallbackContext context);
         void OnAnyButton(InputAction.CallbackContext context);
     }

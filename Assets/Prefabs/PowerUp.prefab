@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4496110702774417392
 MeshFilter:
@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4496110702774417401}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -111,3 +111,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PickUpType: 0
+  powerUpMeshes:
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: -849867405023671905, guid: ad7abddd8f694f1429216b167c2866e4, type: 3}
+  - {fileID: -5491780849873737984, guid: 181c19082cd0db54c9b135b0118f0560, type: 3}
+  powerUpMateirals:
+  - {fileID: 2100000, guid: 186a5533ec1a0fb429e0b49732015e56, type: 2}
+  - {fileID: 2100000, guid: b0fa9b2b9cff0764ab6f5fd7e2bb6909, type: 2}
+  - {fileID: 2100000, guid: 0cedfe2a576351644a28e7ae78591584, type: 2}
+  - {fileID: 2100000, guid: 4edeba2a39a41f745a1b48d9c901f4b4, type: 2}
+  powerUpObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

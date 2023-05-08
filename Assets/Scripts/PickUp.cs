@@ -1,7 +1,9 @@
+using Palmmedia.ReportGenerator.Core.Parser.Filtering;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class PickUp : MonoBehaviour {
     public enum PickUpOptions {
@@ -22,16 +24,20 @@ public class PickUp : MonoBehaviour {
 
     public Mesh[] powerUpMeshes;
     public Material[] powerUpMateirals;
+    public GameObject[] powerUpObjects;
 
-    private MeshFilter mFilter;
-    private MeshRenderer mRenderer;
+    private float pickUpDelay;
 
     private void Start() {
-        mRenderer = GetComponent<MeshRenderer>();
+        pickUpDelay = 0.5f;
+    }
+
+    private void Update() {
+        pickUpDelay -= Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") {
+        if (other.tag == "Player" && pickUpDelay < 0) {
             PowerUp playerPowerUp = other.GetComponent<PowerUp>();
             switch (PickUpType) {
                 case (PickUpTypes.health):
@@ -51,26 +57,27 @@ public class PickUp : MonoBehaviour {
     }
 
     public void SetPickUpType(PickUpOptions type) {
+        GameObject powerUpMesh = null;
         switch (type) {
             case (PickUpOptions.health):
                 PickUpType = PickUpTypes.health;
-                mFilter.mesh = powerUpMeshes[0];
-                mRenderer.material = powerUpMateirals[0];
+                powerUpMesh = Instantiate(powerUpObjects[0], transform.position, Quaternion.identity);
+                powerUpMesh.transform.parent = transform;
                 break;
             case (PickUpOptions.helmet):
                 PickUpType = PickUpTypes.helmet;
-                mFilter.mesh = powerUpMeshes[1];
-                mRenderer.material = powerUpMateirals[1];
+                powerUpMesh = Instantiate(powerUpObjects[1], transform.position, Quaternion.identity);
+                powerUpMesh.transform.parent = transform;
                 break;
             case (PickUpOptions.bomb):
                 PickUpType = PickUpTypes.bomb;
-                mFilter.mesh = powerUpMeshes[2];
-                mRenderer.material = powerUpMateirals[2];
+                powerUpMesh = Instantiate(powerUpObjects[2], transform.position, Quaternion.identity);
+                powerUpMesh.transform.parent = transform;
                 break;
             case (PickUpOptions.chicken):
                 PickUpType = PickUpTypes.chicken;
-                mFilter.mesh = powerUpMeshes[3];
-                mRenderer.material = powerUpMateirals[3];
+                powerUpMesh = Instantiate(powerUpObjects[3], transform.position, Quaternion.identity);
+                powerUpMesh.transform.parent = transform;
                 break;
         }
     }

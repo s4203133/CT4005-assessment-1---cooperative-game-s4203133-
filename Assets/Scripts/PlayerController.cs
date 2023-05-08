@@ -240,6 +240,10 @@ public class PlayerController : MonoBehaviour {
             playerInput.Controller.Dash.Disable();
         }
 
+        if(isBlocking || isStrafing) {
+            maxSpeed = slowedSpeed;
+        }
+
         invincibilityTimer -= Time.deltaTime;
 
         if(playerState == playerMode.beingThrown) {
@@ -248,7 +252,7 @@ public class PlayerController : MonoBehaviour {
             physicMaterial.dynamicFriction = 0.1f;
         }
 
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, groundLayers);
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundLayers);
     }
 
 
@@ -293,7 +297,6 @@ public class PlayerController : MonoBehaviour {
     public void Strafe (InputAction.CallbackContext context) {
         if (context.performed) {
             isStrafing = true;
-            maxSpeed = slowedSpeed;
         } else if (context.canceled) {
             isStrafing = false;
             maxSpeed = originalMaxSpeed;
@@ -306,6 +309,13 @@ public class PlayerController : MonoBehaviour {
                 pauseMenu.ResumeGame();
             } else {
                 pauseMenu.PauseTheGame();
+            }
+        }
+    }
+    public void ExitGame(InputAction.CallbackContext context) {
+        if (context.performed) {
+            if (pauseMenu.IsTheGamePaused()) {
+                pauseMenu.ReturnToMenu();
             }
         }
     }
@@ -685,6 +695,8 @@ public class PlayerController : MonoBehaviour {
             if (playerState == playerMode.move && !isDashing && !isHoldingItem && !isBlocking) {
                 isInRangeOfLadder = false;
                 rb.useGravity = false;
+                rb.velocity = Vector3.zero;
+                knockBackTimer = 0;
                 playerState = playerMode.onLadder;
                 theLadder = collision.gameObject;
                 transform.position = attatchPoint.position;

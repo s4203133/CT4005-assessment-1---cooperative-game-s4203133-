@@ -972,6 +972,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 4fb8366a-a5e1-42ab-bbaf-85065358f410
     m_ActionName: MainMenu/Select[/SwitchProControllerHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1224073600776826160}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0f34a647-5be5-4643-acd5-a41944fa56d5
+    m_ActionName: Controller/Exit[/SwitchProControllerHID/select]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Controller

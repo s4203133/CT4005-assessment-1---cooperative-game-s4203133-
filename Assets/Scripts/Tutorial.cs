@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Tutorial : MonoBehaviour {
     public Vector3[] cameraPositions, room1PlayerPositions, room2PlayerPositions, room3PlayerPositions, room4PlayerPositions, room5PlayerPositions, pressurePadPositions;
@@ -18,9 +18,12 @@ public class Tutorial : MonoBehaviour {
     [SerializeField]
     private PlayerManager playerManager;
 
+    public Image blackOverlay;
+
     // Start is called before the first frame update
     void Start() {
         timer = timeToOpenDoor;
+        //FadeOutBlackScreen();
     }
 
     // Update is called once per frame
@@ -45,34 +48,45 @@ public class Tutorial : MonoBehaviour {
     void MoveToNextRoom(int roomNumber) {
         switch (roomNumber) {
             case (0):
-                SetPlayerPositions(room1PlayerPositions);
+                StartCoroutine(MoveToNextRoom(room1PlayerPositions, roomNumber));
                 break;
             case (1):
-                SetPlayerPositions(room2PlayerPositions);
+                StartCoroutine(MoveToNextRoom(room2PlayerPositions, roomNumber));
                 break;
             case (2):
-                SetPlayerPositions(room3PlayerPositions);
+                StartCoroutine(MoveToNextRoom(room3PlayerPositions, roomNumber));
                 break;
             case (3):
-                SetPlayerPositions(room4PlayerPositions);
+                StartCoroutine(MoveToNextRoom(room4PlayerPositions, roomNumber));
                 break;
             case (4):
-                SetPlayerPositions(room5PlayerPositions);
+                StartCoroutine(MoveToNextRoom(room5PlayerPositions, roomNumber));
                 break;
             case (5):
                 SceneManager.LoadScene(0);
                 break;
         }
         timer = timeToOpenDoor;
-        cam.transform.position = cameraPositions[roomNumber];
-        transform.position = pressurePadPositions[roomNumber];
-        currentRoom++;
 
     }
 
-    void SetPlayerPositions(Vector3[] newPositions) {
+    private IEnumerator MoveToNextRoom(Vector3[] newPositions, int nextRoom) {
+        FadeInBlackScreen();
+        yield return new WaitForSeconds(1f);
         for(int i = 0; i < playerManager.players.Count; i++) {
             playerManager.players[i].transform.position = newPositions[i];
         }
+        cam.transform.position = cameraPositions[nextRoom];
+        transform.position = pressurePadPositions[nextRoom];
+        currentRoom++;
+        FadeOutBlackScreen();
+    }
+
+    public void FadeInBlackScreen() {
+        blackOverlay.CrossFadeColor(Color.blue, 1f, false, true);
+    }
+
+    public void FadeOutBlackScreen() {
+        blackOverlay.CrossFadeColor(Color.clear, 1f, false, true);
     }
 }
