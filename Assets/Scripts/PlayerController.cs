@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
@@ -23,8 +23,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     public playerMode playerState;
-
-    private bool canControl;
 
     [Header("Movement Variables")]
     public bool isBeingHeld;
@@ -112,11 +110,12 @@ public class PlayerController : MonoBehaviour {
     private CameraShake cameraShake;
     private PauseMenu pauseMenu;
 
+    private Image damageEffect;
+
     private void Awake() {
         playerState = playerMode.move;
         playerManager = FindObjectOfType<PlayerManager>();
         mesh = GetComponent<MeshRenderer>();
-        canControl = true;
         isBeingHeld = false;
         playerInput = new PlayerInput();
         rb = GetComponent<Rigidbody>();
@@ -131,6 +130,7 @@ public class PlayerController : MonoBehaviour {
         physicMaterial = GetComponent<CapsuleCollider>().material;
         cameraShake = Camera.main.GetComponent<CameraShake>();
         pauseMenu = GameObject.FindGameObjectWithTag("Pause").GetComponent<PauseMenu>();
+        damageEffect = GameObject.FindGameObjectWithTag("DamageEffect").GetComponent<Image>();
     }
 
     private void Start() {
@@ -158,7 +158,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void ResetPlayerVariables() {
-        canControl = true;
         isBeingHeld = false;
         canDash = true;
         health.SetHealthToMax();
@@ -253,6 +252,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundLayers);
+
+        float damageEffectOpacity = damageEffect.color.a;
+        damageEffectOpacity -= (Time.deltaTime);
+        damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, damageEffectOpacity);
     }
 
 
@@ -661,10 +664,6 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void ToggleCanControl(bool trueOrFalse) {
-        canControl = trueOrFalse;
-    }
-
     void TriggerExplosion() {
         explodeOnLand = false;
         SpawnExplosionParticles();
@@ -739,6 +738,8 @@ public class PlayerController : MonoBehaviour {
                 Vector3 knockBackAngle = new Vector3(transform.position.x, 0f, transform.position.z) - new Vector3(other.transform.position.x, 0f, other.transform.position.z);
                 transform.rotation = Quaternion.Inverse(transform.rotation);
                 PlaceObjectOnFloor();
+                cameraShake.ShakeCamera(0.5f);
+                damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, 0.5f);
 
                 if (playerState == playerMode.onLadder) {
                     // If the player is on a ladder, change the knockback angle

@@ -1,9 +1,4 @@
-using Palmmedia.ReportGenerator.Core.Parser.Filtering;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
 
 public class PickUp : MonoBehaviour {
     public enum PickUpOptions {
