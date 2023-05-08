@@ -993,7 +993,7 @@ MonoBehaviour:
   isBeingHeld: 0
   acceleration: 10
   maxSpeed: 400
-  slowedSpeed: 150
+  slowedSpeed: 175
   rotateSpeed: 990
   groundCheck: {fileID: 4076064239288153712}
   groundLayers:

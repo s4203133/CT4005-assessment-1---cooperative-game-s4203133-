@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Tutorial : MonoBehaviour {
     public Vector3[] cameraPositions, room1PlayerPositions, room2PlayerPositions, room3PlayerPositions, room4PlayerPositions, room5PlayerPositions, pressurePadPositions;
@@ -42,9 +43,6 @@ public class Tutorial : MonoBehaviour {
     }
 
     void MoveToNextRoom(int roomNumber) {
-        timer = timeToOpenDoor;
-        cam.transform.position = cameraPositions[roomNumber];
-        transform.position = pressurePadPositions[roomNumber];
         switch (roomNumber) {
             case (0):
                 SetPlayerPositions(room1PlayerPositions);
@@ -61,7 +59,13 @@ public class Tutorial : MonoBehaviour {
             case (4):
                 SetPlayerPositions(room5PlayerPositions);
                 break;
+            case (5):
+                SceneManager.LoadScene(0);
+                break;
         }
+        timer = timeToOpenDoor;
+        cam.transform.position = cameraPositions[roomNumber];
+        transform.position = pressurePadPositions[roomNumber];
         currentRoom++;
 
     }

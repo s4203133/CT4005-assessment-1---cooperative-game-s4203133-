@@ -282,7 +282,9 @@ public class PlayerController : MonoBehaviour {
 
     public void Block(InputAction.CallbackContext context) {
         if (context.performed) {
-            RaiseShield();
+            if (!isHoldingItem) {
+                RaiseShield();
+            }
         } else if (context.canceled) {
             LowerShield();
         }
@@ -291,8 +293,10 @@ public class PlayerController : MonoBehaviour {
     public void Strafe (InputAction.CallbackContext context) {
         if (context.performed) {
             isStrafing = true;
+            maxSpeed = slowedSpeed;
         } else if (context.canceled) {
             isStrafing = false;
+            maxSpeed = originalMaxSpeed;
         }
     }
 
@@ -393,7 +397,7 @@ public class PlayerController : MonoBehaviour {
 
     private IEnumerator Dash() {
         hasDashed = true;
-        if (playerState != playerMode.move || !canDash) {
+        if (playerState != playerMode.move || !canDash || isStrafing) {
             yield break;
         }
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
@@ -419,6 +423,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void PickUp() {
+        if(isDashing || isBlocking) {
+            return;
+        }
         interactInputTime = 0;
         // If the player is currently not holding an item, pick one up if there's one in range.
         if (!isHoldingItem) {

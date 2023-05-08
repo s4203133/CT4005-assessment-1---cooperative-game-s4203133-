@@ -112,7 +112,7 @@ public class mainmenu : MonoBehaviour
     }
 
     public void LoadTutorial() {
-        Debug.Log("Loaded Tutorial");
+        SceneManager.LoadScene(2);
     }
 
     public void QuitGame()

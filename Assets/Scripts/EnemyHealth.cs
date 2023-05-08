@@ -36,7 +36,7 @@ public class EnemyHealth : MonoBehaviour
     {
         enemyPatrol = GetComponent<EnemyPatrol>();
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+        //rb.isKinematic = true;
         originalKnockBackMultiplyer = knockBackMultiplyer;
 
         camShake = Camera.main.GetComponent<CameraShake>();
@@ -63,10 +63,11 @@ public class EnemyHealth : MonoBehaviour
     private void FixedUpdate() {
         knockBackTimer -= Time.deltaTime;
         if (knockBackTimer > 0) {
-            rb.isKinematic = false;
+            //rb.isKinematic = false;
             ApplyKnockBack();
         } else {
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
             enemyPatrol.UnFreezeAgent();
             knockBackMultiplyer = originalKnockBackMultiplyer;
         }
@@ -138,21 +139,19 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public void KnockBackEnemy(Throwable thrownObject, PlayerController player, float invincibleTime, bool dealDamage) {
-        rb.isKinematic = false;
+        //rb.isKinematic = false;
         rb.velocity *= 0.25f;
         //If the thrown object is a player, set them invincible so they can escape after being thrown
         if (player != null) {
             player.SetInvincibilityTimer(1.1f);
         }
 
-        // Apply knock back only if the enemy isn't already being knocked back
-        if (knockBackTimer < 0) {
+        // Calculate angle to knock the enemy back
             knockBackForce = (transform.position - thrownObject.transform.position).normalized * knockBackMultiplyer;
             knockBackTimer = knockBackLength;
             if (dealDamage) {
                 health -= thrownObject.damage;
                 ParticleSystem newDamageParticles = Instantiate(damageParticles, transform.position, Quaternion.identity);
-            }
-        }
+            }  
     }
 }

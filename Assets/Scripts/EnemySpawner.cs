@@ -111,13 +111,14 @@ public class EnemySpawner : MonoBehaviour
         } else {
             // Generate a random amount of enemies to spawn in one group
             int amountToSpawn = Random.Range((int)groupSizeRange.x, (int)groupSizeRange.y);
-     
+            Transform newSpawnPoint = GetRandomSpawnPoint();
             for (int i = 0; i < amountToSpawn; i++) {
                 // If the game has already spawned the desired amount of enemies, break out of the loop
                 if(numberOfEnemiesSpawned >= numberOfEnemiesToSpawn) {
                     return;
                 }
-                GameObject newEnemy = Instantiate(enemyObject, GetRandomSpawnPoint().position, Quaternion.identity);
+
+                GameObject newEnemy = Instantiate(enemyObject, newSpawnPoint.position, Quaternion.identity);
                 numberOfEnemiesSpawned++;
                 allEnemies.Add(newEnemy);
             }

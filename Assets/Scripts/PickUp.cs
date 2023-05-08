@@ -20,6 +20,16 @@ public class PickUp : MonoBehaviour {
     [SerializeField]
     private PickUpTypes PickUpType;
 
+    public Mesh[] powerUpMeshes;
+    public Material[] powerUpMateirals;
+
+    private MeshFilter mFilter;
+    private MeshRenderer mRenderer;
+
+    private void Start() {
+        mRenderer = GetComponent<MeshRenderer>();
+    }
+
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {
             PowerUp playerPowerUp = other.GetComponent<PowerUp>();
@@ -44,15 +54,23 @@ public class PickUp : MonoBehaviour {
         switch (type) {
             case (PickUpOptions.health):
                 PickUpType = PickUpTypes.health;
+                mFilter.mesh = powerUpMeshes[0];
+                mRenderer.material = powerUpMateirals[0];
                 break;
             case (PickUpOptions.helmet):
                 PickUpType = PickUpTypes.helmet;
+                mFilter.mesh = powerUpMeshes[1];
+                mRenderer.material = powerUpMateirals[1];
                 break;
             case (PickUpOptions.bomb):
                 PickUpType = PickUpTypes.bomb;
+                mFilter.mesh = powerUpMeshes[2];
+                mRenderer.material = powerUpMateirals[2];
                 break;
             case (PickUpOptions.chicken):
                 PickUpType = PickUpTypes.chicken;
+                mFilter.mesh = powerUpMeshes[3];
+                mRenderer.material = powerUpMateirals[3];
                 break;
         }
     }
