@@ -256,6 +256,11 @@ public class PlayerController : MonoBehaviour {
         float damageEffectOpacity = damageEffect.color.a;
         damageEffectOpacity -= (Time.deltaTime);
         damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, damageEffectOpacity);
+
+        if (isHoldingItem && heldItem != null) {
+            Vector3 pickUpPos = new Vector3(transform.position.x, (transform.position.y + transform.localScale.y) + (heldItem.transform.localScale.y + 0.25f), transform.position.z);
+            heldItem.transform.position = pickUpPos;
+        }
     }
 
 
@@ -441,7 +446,7 @@ public class PlayerController : MonoBehaviour {
         }
         interactInputTime = 0;
         // If the player is currently not holding an item, pick one up if there's one in range.
-        if (!isHoldingItem) {
+        if (!isHoldingItem && (playerState == playerMode.move || playerState == playerMode.beingHeld)) {
             RaycastHit hit;
             float numberOfHorizontalChecks = 3;
             float numberOfVerticalChecks = 5;
@@ -484,7 +489,10 @@ public class PlayerController : MonoBehaviour {
         PlayerController otherPlayer = heldItem.GetComponent<PlayerController>();
         if (otherPlayer != null) {
             otherPlayer.playerState = PlayerController.playerMode.beingHeld;
+            otherPlayer.knockBackTimer = 0;
         }
+        // Reset Rigidbody values when picking item up
+        ReturnRigidbodyValues(heldItem.GetComponent<Rigidbody>(), true, false);
 
         // Reset the hit ground variable in picked up objects throwable script
         Throwable otherThrowable = heldItem.GetComponent<Throwable>();
@@ -494,11 +502,7 @@ public class PlayerController : MonoBehaviour {
         Vector3 pickUpPos = new Vector3(transform.position.x, (transform.position.y + transform.localScale.y) + (heldItem.transform.localScale.y + 0.25f), transform.position.z);
         heldItem.transform.position = pickUpPos;
         heldItem.transform.rotation = transform.rotation;
-        //heldItem.transform.rotation = Quaternion.Euler(0, heldItem.transform.rotation.y, 0);
         heldItem.transform.parent = transform;
-
-        // Reset Rigidbody values when picking item up
-        ReturnRigidbodyValues(heldItem.GetComponent<Rigidbody>(), true, false);
 
         StartCoroutine(Wait(1f));
         isHoldingItem = true;
@@ -637,10 +641,8 @@ public class PlayerController : MonoBehaviour {
         }
         // When an item is being put down
         else if (putDown) {
-            Rigidbody heldItemRB = heldItem.GetComponent<Rigidbody>();
-            heldItemRB.useGravity = true;
-            //heldItemRB.rotation = Quaternion.Euler(0, 0, 0);
-            heldItemRB.isKinematic = false;
+            rb.useGravity = true;
+            rb.isKinematic = false;
             playerState = playerMode.move;
         } else {
             return;
@@ -664,7 +666,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void TriggerExplosion() {
+    public void TriggerExplosion() {
         explodeOnLand = false;
         SpawnExplosionParticles();
         cameraShake.ShakeCamera(1f);
@@ -673,10 +675,8 @@ public class PlayerController : MonoBehaviour {
         foreach (Collider hit in colliders) {
             EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
             enemy.KnockBackEnemy(throwable, this, 0f, true);
-
         }
         GetComponent<PowerUp>().SetPowerUpActive(false);
-
     }
 
     void SpawnExplosionParticles() {
@@ -740,6 +740,8 @@ public class PlayerController : MonoBehaviour {
                 PlaceObjectOnFloor();
                 cameraShake.ShakeCamera(0.5f);
                 damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, 0.5f);
+                isButtonDown = false;
+                interactInputTime = 0;
 
                 if (playerState == playerMode.onLadder) {
                     // If the player is on a ladder, change the knockback angle
@@ -765,7 +767,9 @@ public class PlayerController : MonoBehaviour {
                 }
 
                 // Set timer for knock back length and invincibility frames (these are decreased by delta time in update, so effects are only applied while the timers are greater than 0)
-                knockBackTimer = knockBackLength;
+                if(playerState != playerMode.beingHeld) {
+                    knockBackTimer = knockBackLength;
+                }
                 SetInvincibilityTimer(invincibilityLength);
             }
         }

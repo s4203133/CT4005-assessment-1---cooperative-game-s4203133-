@@ -116,4 +116,5 @@ public class PowerUp : MonoBehaviour {
     public float GetTimer() {
         return timer;
     }
+
 }

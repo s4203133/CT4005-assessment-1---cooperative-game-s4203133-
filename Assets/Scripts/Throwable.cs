@@ -72,7 +72,7 @@ public class Throwable : MonoBehaviour
                 rb.constraints = RigidbodyConstraints.FreezeRotation;
                 return;
             } else {
-                if(playerHealth != null) {
+                if(playerHealth != null && !playerHealth.isDead) {
                     playerHealth.DisablePlayer();
                 }
                 return;
@@ -87,6 +87,7 @@ public class Throwable : MonoBehaviour
         // If the player hits something while being thrown
         if (isBeingThrown || (player != null && player.playerState == PlayerController.playerMode.beingThrown)) {
             if (other.tag == "Enemy") {
+                rb.velocity *= 0.5f;
                 float cameraShakeMagnitude = (damage * (100/originalDamage)) / 100;
                 cameraShake.ShakeCamera(cameraShakeMagnitude);
                 EnemyHealth hitEnemy = other.GetComponent<EnemyHealth>();

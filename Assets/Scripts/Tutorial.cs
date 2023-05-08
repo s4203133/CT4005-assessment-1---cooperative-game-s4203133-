@@ -74,6 +74,7 @@ public class Tutorial : MonoBehaviour {
         FadeInBlackScreen();
         yield return new WaitForSeconds(1f);
         for(int i = 0; i < playerManager.players.Count; i++) {
+            playerManager.players[i].GetComponent<PlayerController>().ResetPlayerVariables();
             playerManager.players[i].transform.position = newPositions[i];
         }
         cam.transform.position = cameraPositions[nextRoom];
