@@ -739,7 +739,8 @@ public class PlayerController : MonoBehaviour {
                 transform.rotation = Quaternion.Inverse(transform.rotation);
                 PlaceObjectOnFloor();
                 cameraShake.ShakeCamera(0.5f);
-                damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, 0.5f);
+                damageEffect.color = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, 0.75f);
+                //damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, 0.5f);
                 isButtonDown = false;
                 interactInputTime = 0;
 
