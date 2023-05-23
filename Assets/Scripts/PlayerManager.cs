@@ -25,6 +25,7 @@ public class PlayerManager : MonoBehaviour
     public int numberOfPlayersToProgress;
 
     public int numberOfEnemiesKilled;
+    public int numberOfEnemiesInLevel;
 
     private PlayerInputManager inputManager;
     private EnemySpawner enemySpawner;
@@ -56,6 +57,11 @@ public class PlayerManager : MonoBehaviour
     public Vector3 cameraPositionBoss;
     public Vector3[] playerPositionsBoss;
 
+    [Header("Puzzle Buttons")]
+    [SerializeField]
+    private PuzzleButton[] levelButtons;
+
+
     public bool helmetPowerUpInLevel, bombPowerUpInLevel, chickenPowerUpInLevel;
 
     public GameObject joinGamePrompt;
@@ -82,20 +88,14 @@ public class PlayerManager : MonoBehaviour
 
     private void Update() {
         if (numberOfActivePlayers == 0) {
-            switch (currentLevel) {
-                case (level.Level1):
+            if(currentLevel != level.Lobby) {
                     gameOver.EndGame();
-                    break;
-                case (level.Level2):
-                    gameOver.EndGame();
-                    break;
-                case (level.Level3):
-                    gameOver.EndGame();
-                    break;
-                case (level.Boss):
-
-                    break;
             }
+        }
+
+        int TotalEnemiesToSpawnInLevel = enemySpawner.TotalEnemiesInLevel();
+        if (numberOfEnemiesKilled == TotalEnemiesToSpawnInLevel) {
+            ActivateButton();
         }
 
         if((playersReadyToStart == numberOfPlayersToProgress) && players.Count > 0 && !loadingLevel) {
@@ -129,7 +129,7 @@ public class PlayerManager : MonoBehaviour
             switch (currentLevel) {
                 case (level.Lobby):
                     joinGamePrompt.SetActive(false);
-                    StartCoroutine(ChangeLevel(cameraPositionLev1, playerPositionsLev1));
+                    StartCoroutine(ChangeLevel(1, cameraPositionLev1, playerPositionsLev1));
                     numberOfPlayersToProgress = playersToStartLevel1;
                     currentLevel = level.Level1;
                     enemySpawner.PrepareToSpawn(1, numberOfPlayers);
@@ -137,7 +137,7 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case (level.Level1):
                     StopCoroutine(enemySpawner.SpawnEnemies());
-                    StartCoroutine(ChangeLevel(cameraPositionLev2, playerPositionsLev2));
+                    StartCoroutine(ChangeLevel(2, cameraPositionLev2, playerPositionsLev2));
                     numberOfPlayersToProgress = playersToStartLevel2;
                     currentLevel = level.Level2;
                     enemySpawner.PrepareToSpawn(2, numberOfPlayers);
@@ -145,7 +145,7 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case (level.Level2):
                     StopCoroutine(enemySpawner.SpawnEnemies());
-                    StartCoroutine(ChangeLevel(cameraPositionLev3, playerPositionsLev3));
+                    StartCoroutine(ChangeLevel(3, cameraPositionLev3, playerPositionsLev3));
                     numberOfPlayersToProgress = playersToStartLevel3;
                     currentLevel = level.Level3;
                     enemySpawner.PrepareToSpawn(3, numberOfPlayers);
@@ -153,14 +153,14 @@ public class PlayerManager : MonoBehaviour
                     break;
                 case (level.Level3):
                     StopCoroutine(enemySpawner.SpawnEnemies());
-                    StartCoroutine(ChangeLevel(cameraPositionBoss, playerPositionsBoss));
+                    StartCoroutine(ChangeLevel(4, cameraPositionBoss, playerPositionsBoss));
                     numberOfPlayersToProgress = playersToStartBoss;
                     currentLevel = level.Boss;
                     enemySpawner.PrepareToSpawn(4, numberOfPlayers);
                     StartCoroutine(enemySpawner.SpawnEnemies());
                     break;
                 case (level.Boss):
-                    StartCoroutine(ChangeLevel(cameraPositionLobby, playerPositionsLobby));
+                    StartCoroutine(ChangeLevel(5, cameraPositionLobby, playerPositionsLobby));
                     currentLevel = level.Lobby;
                     joinGamePrompt.SetActive(true);
                     break;
@@ -174,7 +174,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ChangeLevel(Vector3 cameraPosition, Vector3[] playerPositions) {
+    private IEnumerator ChangeLevel(int level, Vector3 cameraPosition, Vector3[] playerPositions) {
         loadingLevel = true;
         blackOverlay.CrossFadeColor(Color.black, 1f, false, true);
         yield return new WaitForSeconds(1f);
@@ -194,6 +194,20 @@ public class PlayerManager : MonoBehaviour
         levelStartCounter = 0;
         loadingLevel = false;
         FadeOutBlackScreen();
+    }
+
+    void ActivateButton() {
+        switch (currentLevel) {
+            case (level.Level1):
+                levelButtons[0].canBePressed = true;
+                break;
+            case (level.Level2):
+                levelButtons[1].canBePressed = true;
+                break;
+            case (level.Level3):
+                levelButtons[2].canBePressed = true;
+                break;
+        }
     }
 
     public void FadeInBlackScreen() {

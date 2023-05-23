@@ -1153,6 +1153,7 @@ MonoBehaviour:
   interactableLayer:
   - Player
   - PickUp
+  - Enemy
   isHoldingItem: 0
   minMaxHoldTime: {x: 0.25, y: 1}
   interactInputTime: 0

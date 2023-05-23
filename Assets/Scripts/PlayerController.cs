@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour {
 
     public playerMode playerState;
 
+    private Transform thisTransform;
+
     [Header("Movement Variables")]
     public bool isBeingHeld;
     [SerializeField]
@@ -114,6 +116,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake() {
         playerState = playerMode.move;
+        thisTransform = GetComponent<Transform>();
         playerManager = FindObjectOfType<PlayerManager>();
         mesh = GetComponent<MeshRenderer>();
         isBeingHeld = false;
@@ -166,7 +169,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void SetPlayerPosition(Vector3[] playerPositions) {
-        transform.position = playerPositions[playerManager.numberOfPlayers - 1];
+        thisTransform.position = playerPositions[playerManager.numberOfPlayers - 1];
     }
 
     void SpawnPlayerInactive() {
@@ -203,7 +206,7 @@ public class PlayerController : MonoBehaviour {
         if (isDashing) {
             float dashTimer = 0;
             if (dashTimer < dashLength) {
-                rb.AddForce(transform.forward * (dashForce * 10));
+                rb.AddForce(thisTransform.forward * (dashForce * 10));
                 dashTimer += Time.deltaTime;
             }
         }
@@ -258,7 +261,7 @@ public class PlayerController : MonoBehaviour {
         damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, damageEffectOpacity);
 
         if (isHoldingItem && heldItem != null) {
-            Vector3 pickUpPos = new Vector3(transform.position.x, (transform.position.y + transform.localScale.y) + (heldItem.transform.localScale.y + 0.25f), transform.position.z);
+            Vector3 pickUpPos = new Vector3(thisTransform.position.x, (thisTransform.position.y + thisTransform.localScale.y) + (heldItem.transform.localScale.y + 0.25f), thisTransform.position.z);
             heldItem.transform.position = pickUpPos;
         }
     }
@@ -331,7 +334,7 @@ public class PlayerController : MonoBehaviour {
     public void DismountFromPlayer(InputAction.CallbackContext context) {
         if (context.performed) {
             if(playerState == playerMode.beingHeld) {
-                PlayerController parentPlayer = transform.parent.GetComponent<PlayerController>();
+                PlayerController parentPlayer = thisTransform.parent.GetComponent<PlayerController>();
                 if(parentPlayer != null) {
                     parentPlayer.PlaceObjectOnFloor();
                 }
@@ -367,7 +370,7 @@ public class PlayerController : MonoBehaviour {
                         Vector3 LookDirection = new Vector3(moveInput.x * xVel, 0, moveInput.y * zVel) * Time.deltaTime;
                         Quaternion targetRotation = Quaternion.LookRotation(LookDirection, Vector3.up);
 
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+                        thisTransform.rotation = Quaternion.RotateTowards(thisTransform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
                     }
                 }
             }
@@ -378,9 +381,9 @@ public class PlayerController : MonoBehaviour {
             bool isOtherPlayerBelow = false;
             // Fire 2 raycasts up and down of the player to check that there is a player above or below them on the ladder
             RaycastHit hit;
-            Vector3 rayFirePos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            Ray upperCheck = new Ray(rayFirePos, transform.up);
-            Ray LowerCheck = new Ray(rayFirePos, -transform.up);
+            Vector3 rayFirePos = new Vector3(thisTransform.position.x, thisTransform.position.y, thisTransform.position.z);
+            Ray upperCheck = new Ray(rayFirePos, thisTransform.up);
+            Ray LowerCheck = new Ray(rayFirePos, -thisTransform.up);
 
             // Stop the player from being able to move up the ladder if there is another player above them
             if (Physics.Raycast(upperCheck, out hit, 1.15f)) {
@@ -401,9 +404,9 @@ public class PlayerController : MonoBehaviour {
 
             // Check the upwards/downwards direction of the joystick on the game pad
             if (moveInput.y > 0.125 && !isOtherPlayerAbove) {
-                rb.velocity = transform.up * climbSpeed;
+                rb.velocity = thisTransform.up * climbSpeed;
             } else if (moveInput.y < -0.125 && !isOtherPlayerBelow) {
-                rb.velocity = transform.up * -climbSpeed;
+                rb.velocity = thisTransform.up * -climbSpeed;
             }
             // Stops player from moving if joystick is close to the middle
             else {
@@ -455,9 +458,9 @@ public class PlayerController : MonoBehaviour {
                 for(int j = -1; j < (-1 + numberOfVerticalChecks); j++) {
                     // Horizontal Check Positions: Players X position + -0.85, 0, 0.85
                     // Vertical Check positions: Players Y position + -1, -0.5, 0, 0.5,
-                    Vector3 rayFirePos = new Vector3(transform.position.x + (0.85f * j), transform.position.y + (i * 0.5f), transform.position.z);
+                    Vector3 rayFirePos = new Vector3(thisTransform.position.x + (0.85f * j), thisTransform.position.y + (i * 0.5f), thisTransform.position.z);
 
-                    Ray pickUpObjectCheck = new Ray(rayFirePos, transform.forward);
+                    Ray pickUpObjectCheck = new Ray(rayFirePos, thisTransform.forward);
 
                     // Check all of the raycasts, and if one hits an interactable item, pick it up
                     if (Physics.Raycast(pickUpObjectCheck, out hit, 3f)) {
@@ -465,9 +468,8 @@ public class PlayerController : MonoBehaviour {
                         for (int x = 0; x < interactableLayer.Length; x++) {
                             if (hit.collider.tag == interactableLayer[x] && hit.transform.name != this.gameObject.name) {
                                 PickUpObject(hit);
-                                // End the loop
-                                i = 100;
-                                j = 100;
+                                i = 10;
+                                j = 10;
                                 break;
                             } else {
                                 continue;
@@ -491,6 +493,14 @@ public class PlayerController : MonoBehaviour {
             otherPlayer.playerState = PlayerController.playerMode.beingHeld;
             otherPlayer.knockBackTimer = 0;
         }
+        EnemyHealth pickedUpEnemy = heldItem.GetComponent<EnemyHealth>();
+        if (pickedUpEnemy != null) {
+            if (!pickedUpEnemy.isDead) {
+                return;
+            } else {
+                pickedUpEnemy.CancelDeath();
+            }
+        }
         // Reset Rigidbody values when picking item up
         ReturnRigidbodyValues(heldItem.GetComponent<Rigidbody>(), true, false);
 
@@ -499,9 +509,15 @@ public class PlayerController : MonoBehaviour {
         otherThrowable.hasHitSomething = false;
 
         // Set the position of the picked up object above the player
-        Vector3 pickUpPos = new Vector3(transform.position.x, (transform.position.y + transform.localScale.y) + (heldItem.transform.localScale.y + 0.25f), transform.position.z);
+        Vector3 pickUpPos = new Vector3(thisTransform.position.x, (thisTransform.position.y + thisTransform.localScale.y) + (heldItem.transform.localScale.y + 0.25f), thisTransform.position.z);
         heldItem.transform.position = pickUpPos;
-        heldItem.transform.rotation = transform.rotation;
+        // Only set rotation if this object isn't an enemy
+        if (pickedUpEnemy == null) {
+            heldItem.transform.rotation = thisTransform.rotation;
+        } else {
+            Vector3 newRotation = thisTransform.eulerAngles + (Vector3.forward * 90);
+            heldItem.transform.rotation = Quaternion.Euler(newRotation);
+        }
         heldItem.transform.parent = transform;
 
         StartCoroutine(Wait(1f));
@@ -539,7 +555,7 @@ public class PlayerController : MonoBehaviour {
                 if (thrownObject != null) {
                     thrownObject.isBeingThrown = true;
                     thrownObject.damage *= interactInputTime;
-                    thrownObject.thrownDirection = transform.forward;
+                    thrownObject.thrownDirection = thisTransform.forward;
                 }
 
                 // Return Rigidbody values when putting item down
@@ -552,8 +568,8 @@ public class PlayerController : MonoBehaviour {
             heldItem = null;
             // Check if the player has a parent object, if so, see if it has a player controller script attatched to it
             PlayerController parentController = null;
-            if (transform.parent != null) {
-                parentController = transform.parent.GetComponent<PlayerController>();
+            if (thisTransform.parent != null) {
+                parentController = thisTransform.parent.GetComponent<PlayerController>();
             }
             // If parent object has a player controller, then we are being held by another player, so set player's state to being held
             if (parentController == null) {
@@ -581,7 +597,7 @@ public class PlayerController : MonoBehaviour {
         }
         // Unparent heldItem from the player and fire a raycast downwards from in front the player.
         heldItem.transform.parent = null;
-        Vector3 putDownPos = heldItem.transform.position + transform.forward * 1.5f + transform.up * 1.1f;
+        Vector3 putDownPos = heldItem.transform.position + thisTransform.forward * 1.5f + thisTransform.up * 1.1f;
         heldItem.transform.position = putDownPos;
         RaycastHit groundCheck;
 
@@ -599,8 +615,12 @@ public class PlayerController : MonoBehaviour {
         PlayerController otherPlayer = heldItem.GetComponent<PlayerController>();
         if(otherPlayer != null) {
             otherPlayer.playerState = PlayerController.playerMode.move;
-
         }
+        EnemyHealth heldEnemy = heldItem.GetComponent<EnemyHealth>();
+        if (heldEnemy != null) {
+            heldEnemy.StartDeathCountdown();
+        }
+
         heldItem = null;
         isHoldingItem = false;
     }
@@ -658,11 +678,16 @@ public class PlayerController : MonoBehaviour {
         }
         // Apply a forwards and downWards force on the object based on how long the button has been held down
         thrownObjectRB.constraints = RigidbodyConstraints.None;
-        thrownObjectRB.velocity = (playerThatsHolding.transform.forward * maxThrowForce * throwSustain) + (-transform.up * (maxThrowForce / 4) * interactInputTime);
+        thrownObjectRB.velocity = (playerThatsHolding.transform.forward * maxThrowForce * throwSustain) + (-thisTransform.up * (maxThrowForce / 4) * interactInputTime);
 
         // Option to add torque and spin the object when thrown
         if (spinOnThrow) {
             thrownObjectRB.AddTorque(Random.Range(0, 12), Random.Range(1, 2), Random.Range(-12, 12), ForceMode.Impulse);
+        }
+
+        EnemyHealth heldEnemy = heldItem.GetComponent<EnemyHealth>();
+        if (heldEnemy != null) {
+            heldEnemy.StartDeathCountdown();
         }
     }
 
@@ -670,20 +695,22 @@ public class PlayerController : MonoBehaviour {
         explodeOnLand = false;
         SpawnExplosionParticles();
         cameraShake.ShakeCamera(1f);
-        Vector3 explosionPos = transform.position;
+        Vector3 explosionPos = thisTransform.position;
         Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, enemyLayer);
         foreach (Collider hit in colliders) {
             EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
-            enemy.KnockBackEnemy(throwable, this, 0f, true);
+            if (!enemy.isDead) {
+                enemy.KnockBackEnemy(throwable, true);
+            }
         }
         GetComponent<PowerUp>().SetPowerUpActive(false);
     }
 
     void SpawnExplosionParticles() {
         foreach(ParticleSystem particle in ExplosionParticles) {
-            ParticleSystem newExplosion = Instantiate(particle, transform.position, Quaternion.identity); 
+            ParticleSystem newExplosion = Instantiate(particle, thisTransform.position, Quaternion.identity); 
         }
-        GameObject explosionFlash = Instantiate(explosionLight, transform.position, Quaternion.identity);
+        GameObject explosionFlash = Instantiate(explosionLight, thisTransform.position, Quaternion.identity);
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -698,8 +725,8 @@ public class PlayerController : MonoBehaviour {
                 knockBackTimer = 0;
                 playerState = playerMode.onLadder;
                 theLadder = collision.gameObject;
-                transform.position = attatchPoint.position;
-                transform.rotation = theLadder.transform.rotation;
+                thisTransform.position = attatchPoint.position;
+                thisTransform.rotation = theLadder.transform.rotation;
             }
         }
     }
@@ -717,14 +744,14 @@ public class PlayerController : MonoBehaviour {
                 playerState = playerMode.move;
                 rb.useGravity = true;
                 // Reset the players rotation based on the direction of the ladder
-                if (transform.rotation.x != 0) {
-                    transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
-                } else if(transform.rotation.z != 0) {
-                    transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0);
+                if (thisTransform.rotation.x != 0) {
+                    thisTransform.rotation = Quaternion.Euler(0, thisTransform.rotation.y, thisTransform.rotation.z);
+                } else if(thisTransform.rotation.z != 0) {
+                    thisTransform.rotation = Quaternion.Euler(thisTransform.rotation.x, thisTransform.rotation.y, 0);
                 }
                 // Set the players position to the exit point of the ladder
                 Transform exitPoint = other.transform.GetChild(1);
-                transform.position = exitPoint.position;
+                thisTransform.position = exitPoint.position;
             }
         }
 
@@ -734,28 +761,31 @@ public class PlayerController : MonoBehaviour {
             }
 
             if ((playerState != playerMode.beingThrown || !throwable.isBeingThrown) && invincibilityTimer < 0) {
+                EnemyHealth enemyTouched = other.GetComponent<EnemyHealth>();
+                if (enemyTouched.isDead) {
+                    return;
+                }
                 // If the player collides with an enemy, generate a knock back force 
-                Vector3 knockBackAngle = new Vector3(transform.position.x, 0f, transform.position.z) - new Vector3(other.transform.position.x, 0f, other.transform.position.z);
-                transform.rotation = Quaternion.Inverse(transform.rotation);
+                Vector3 knockBackAngle = new Vector3(thisTransform.position.x, 0f, thisTransform.position.z) - new Vector3(other.transform.position.x, 0f, other.transform.position.z);
+                thisTransform.rotation = Quaternion.Inverse(thisTransform.rotation);
                 PlaceObjectOnFloor();
                 cameraShake.ShakeCamera(0.5f);
                 damageEffect.color = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, 0.75f);
-                //damageEffect.color = new Color(damageEffect.color.r, damageEffect.color.g, damageEffect.color.b, 0.5f);
                 isButtonDown = false;
                 interactInputTime = 0;
 
                 if (playerState == playerMode.onLadder) {
                     // If the player is on a ladder, change the knockback angle
-                    knockBackAngle = transform.up * 1.125f;
-                    transform.position += -transform.forward * 0.2f;
+                    knockBackAngle = thisTransform.up * 1.125f;
+                    thisTransform.position += -thisTransform.forward * 0.2f;
 
                     playerState = playerMode.move;
                     rb.useGravity = true;
                     // Reset the players rotation based on the direction of the ladder
-                    if (transform.rotation.x != 0) {
-                        transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
-                    } else if (transform.rotation.z != 0) {
-                        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0);
+                    if (thisTransform.rotation.x != 0) {
+                        thisTransform.rotation = Quaternion.Euler(0, thisTransform.rotation.y, thisTransform.rotation.z);
+                    } else if (thisTransform.rotation.z != 0) {
+                        thisTransform.rotation = Quaternion.Euler(thisTransform.rotation.x, thisTransform.rotation.y, 0);
                     }
                 }
 

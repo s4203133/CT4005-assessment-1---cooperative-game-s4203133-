@@ -1,26 +1,40 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
     public float health;
+    [SerializeField]
     private EnemyPatrol enemyPatrol;
+    [SerializeField]
     private Rigidbody rb;
+    [SerializeField]
+    private NavMeshAgent agent;
+    [SerializeField]
+    private CapsuleCollider enemyCollider;
+
     private GameObject objectHitBy;
-    public ParticleSystem damageParticles;
-    public ParticleSystem deathParticles;
+    [SerializeField]
+    private ParticleSystem damageParticles;
+    [SerializeField]
+    private ParticleSystem deathParticles;
+    [SerializeField]
+    private bool oneHitKill;
+
+    public bool isDead = false;
+    [SerializeField]
+    [Tooltip("The time in seconds for the enemy to despawn after dying")]
+    private float despawnTime;
+
+    private Coroutine deathCountdown;
 
     [Tooltip("The length at which a knock back affect will last when the enemy has been hit")]
     public float knockBackLength;
-    public float knockBackMultiplyer;
-    private float originalKnockBackMultiplyer;
+    public Vector2 knockBackMultiplyerRange;
     public float knockBackTimer;
     public Vector3 knockBackForce;
-
-    [Header("Enemy Health Bar UI Variables")]
-    //public Image healthBar;
-    private Transform healthBarParent;
-    private Vector2 healthBarScale;
 
     [Header("Power Up Spawning variables")]
     public GameObject powerUpObject;
@@ -28,67 +42,44 @@ public class EnemyHealth : MonoBehaviour
     public int powerUpSpawnChance;
     private int powerUpSpawnChanceIndex;
 
+    [SerializeField]
     private CameraShake camShake;
+    [SerializeField]
     private PlayerManager playerManager;
 
-    // Start is called before the first frame update
     void Start()
     {
-        enemyPatrol = GetComponent<EnemyPatrol>();
-        rb = GetComponent<Rigidbody>();
-        //rb.isKinematic = true;
-        originalKnockBackMultiplyer = knockBackMultiplyer;
-
-        camShake = Camera.main.GetComponent<CameraShake>();
-        playerManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerManager>();
-
         powerUpSpawnChanceIndex = Random.Range(0, 100);
-        //healthBarScale = healthBar.rectTransform.localScale;
-        //healthBarParent = healthBar.transform.parent;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(health <= 0) {
-            Death();
-        }
-
-        float healthBarScalar = 0;
-        healthBarScalar = 50 / healthBarScale.x;
-        //healthBar.rectTransform.localScale = new Vector2(Mathf.Lerp(healthBar.rectTransform.localScale.x, (float)health / healthBarScalar, 0.1f), healthBar.rectTransform.localScale.y);
-        //healthBarParent.rotation = cam.transform.rotation;
+        rb.isKinematic = true;
     }
 
     private void FixedUpdate() {
-        knockBackTimer -= Time.deltaTime;
-        if (knockBackTimer > 0) {
+        //knockBackTimer -= Time.deltaTime;
+        //if (knockBackTimer > 0) {
             //rb.isKinematic = false;
-            ApplyKnockBack();
-        } else {
+            //ApplyKnockBack();
+        //} else {
             //rb.isKinematic = true;
-            rb.velocity = Vector3.zero;
-            enemyPatrol.UnFreezeAgent();
-            knockBackMultiplyer = originalKnockBackMultiplyer;
-        }
+            //rb.velocity = Vector3.zero;
+            //enemyPatrol.UnFreezeAgent();
+            //knockBackMultiplyer = originalKnockBackMultiplyer;
+        //}
     }
 
-    private void Death() {
+    private IEnumerator Death(float delay) {
+        yield return new WaitForSeconds(delay);
         ParticleSystem newDeathParticles = Instantiate(deathParticles, transform.position, Quaternion.identity);
-        camShake.ShakeCamera(0.9f);
-        if(objectHitBy.tag == "Player") {
+        if(objectHitBy != null && objectHitBy.tag == "Player") {
             if(powerUpSpawnChanceIndex <= powerUpSpawnChance) {
                 SpawnPowerUp();
             }
         }
-        playerManager.numberOfEnemiesKilled++;
         GameObject.FindGameObjectWithTag("Enemy Spawner").GetComponent<EnemySpawner>().allEnemies.Remove(this.gameObject);
         Destroy(gameObject);
     }
 
     public void ApplyKnockBack() {
         rb.velocity = knockBackForce;
-        knockBackMultiplyer *= 0.1f;
         enemyPatrol.FreezeAgent();
     }
 
@@ -134,24 +125,32 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "PlayerShield") {
-            KnockBackEnemy(other.transform.parent.GetComponent<Throwable>(), null, 0, false);
+            KnockBackEnemy(other.transform.parent.GetComponent<Throwable>(), false);
         }
     }
 
-    public void KnockBackEnemy(Throwable thrownObject, PlayerController player, float invincibleTime, bool dealDamage) {
-        //rb.isKinematic = false;
-        rb.velocity *= 0.25f;
-        //If the thrown object is a player, set them invincible so they can escape after being thrown
-        if (player != null) {
-            player.SetInvincibilityTimer(1.1f);
+    public void KnockBackEnemy(Throwable thrownObject, bool dealDamage) {
+        if (dealDamage) {
+            enemyCollider.isTrigger = false;
+            ParticleSystem newDamageParticles = Instantiate(damageParticles, transform.position, Quaternion.identity);
+            enemyPatrol.enabled = false;
+            rb.isKinematic = false;
+            agent.enabled = false;
+            transform.position += (Vector3.up * 2);
+            knockBackForce = (thrownObject.thrownDirection * Random.Range(knockBackMultiplyerRange.x, knockBackMultiplyerRange.y)) + (Vector3.up * 50);
+            rb.AddForce(knockBackForce, ForceMode.Impulse);
+            rb.AddTorque(knockBackForce + (-transform.forward * Random.Range(20, 60)), ForceMode.Impulse);
+            isDead = true;
+            playerManager.numberOfEnemiesKilled++;
+            StartDeathCountdown();
         }
+    }
 
-        // Calculate angle to knock the enemy back
-            knockBackForce = (transform.position - thrownObject.transform.position).normalized * knockBackMultiplyer;
-            knockBackTimer = knockBackLength;
-            if (dealDamage) {
-                health -= thrownObject.damage;
-                ParticleSystem newDamageParticles = Instantiate(damageParticles, transform.position, Quaternion.identity);
-            }  
+    public void StartDeathCountdown() {
+        deathCountdown = StartCoroutine(Death(despawnTime));
+    }
+
+    public void CancelDeath() {
+        StopCoroutine(deathCountdown);
     }
 }

@@ -34,7 +34,7 @@ public class EnemyPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target != null) {
+        if (target != null && agent.enabled) {
             agent.destination = target.transform.position;
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
 

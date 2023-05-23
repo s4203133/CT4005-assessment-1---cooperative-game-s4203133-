@@ -63,6 +63,10 @@ public class EnemySpawner : MonoBehaviour
         levelToSpawnAt = level;
     }
 
+    public int TotalEnemiesInLevel() {
+        return numberOfEnemiesToSpawn;
+    }
+
     public IEnumerator SpawnEnemies() {
         // Wait for a short delay before the spawning begins
         yield return new WaitForSeconds(startDelay);

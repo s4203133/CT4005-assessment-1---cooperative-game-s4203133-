@@ -205,6 +205,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &11560574
@@ -1242,7 +1246,7 @@ MonoBehaviour:
   groupSizeRange: {x: 2, y: 4}
   numberOfEnemiesSpawned: 0
   numberOfWavesSpawned: 0
-  enemiesToSpawnPerPlayer: 00000000080000000c0000000f00000000000000
+  enemiesToSpawnPerPlayer: 0000000006000000080000000a00000000000000
 --- !u!1 &101857451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1707,6 +1711,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &121700831
@@ -1985,7 +1993,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &124749061
 Transform:
@@ -2116,6 +2124,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &135360443
@@ -2433,6 +2445,8 @@ Transform:
   - {fileID: 1536764632}
   - {fileID: 743501857}
   - {fileID: 675558601}
+  - {fileID: 960582647}
+  - {fileID: 1956619382}
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -2487,6 +2501,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &186105996
@@ -2943,8 +2961,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &216636390
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3138,6 +3156,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &223575715
@@ -3726,8 +3748,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &275550845
 GameObject:
   m_ObjectHideFlags: 0
@@ -4783,8 +4805,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &357952186
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5032,9 +5054,45 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2116552601, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2164271285522814684, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 382778133}
+    - target: {fileID: 2164271285522814684, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: playerManager
+      value: 
+      objectReference: {fileID: 1740962555}
+    - target: {fileID: 7236409983932766312, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7340119872616459344, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_Drag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7340119872616459344, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_Mass
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7340119872616459344, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7340119872616459344, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7340119872616459368, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7340119872616459370, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7340119872616459372, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: m_RootOrder
@@ -5058,15 +5116,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7340119872616459372, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7340119872616459372, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7340119872616459372, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.000000044703487
       objectReference: {fileID: 0}
     - target: {fileID: 7340119872616459372, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5080,20 +5138,75 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7340119872616459373, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: camShake
+      value: 
+      objectReference: {fileID: 700547386}
+    - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: despawnTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: enemyCollider
+      value: 
+      objectReference: {fileID: 382778132}
+    - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: playerManager
+      value: 
+      objectReference: {fileID: 1740962555}
     - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
       propertyPath: powerUpObject
       value: 
       objectReference: {fileID: 24953975}
     - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
-      propertyPath: powerUpSpawnChance
-      value: 35
+      propertyPath: knockBackMultiplyer
+      value: 75
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: knockBackMultiplyerRange.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935379715001298905, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: knockBackMultiplyerRange.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152266832445590238, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8249845756674276236, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8249845756674276236, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: minMaxSpeedRange.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541848402469124343, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8541848402469124343, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
 --- !u!1 &382778131 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7340119872616459368, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+  m_PrefabInstance: {fileID: 382778130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &382778132 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 8152266832445590238, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
+  m_PrefabInstance: {fileID: 382778130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &382778133 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7340119872616459344, guid: 4c70841d4aeb8254f90ed4ecd244b69f, type: 3}
   m_PrefabInstance: {fileID: 382778130}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &390756829
@@ -6836,9 +6949,11 @@ GameObject:
   - component: {fileID: 552767825}
   - component: {fileID: 552767824}
   - component: {fileID: 552767823}
+  - component: {fileID: 552767826}
+  - component: {fileID: 552767827}
   m_Layer: 0
-  m_Name: Key
-  m_TagString: Untagged
+  m_Name: Button Level 2
+  m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6908,6 +7023,35 @@ Transform:
   m_Father: {fileID: 1680353280}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &552767826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552767822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a579553ba907247961ab29e19167e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canBePressed: 0
+  hasBeenPressed: 0
+  levelTrigger: {fileID: 1432096159}
+  positionToSetTrigger: {x: 17.5, y: -5.75, z: 8}
+--- !u!65 &552767827
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552767822}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 43.90035, y: 10.846142, z: 11.538221}
+  m_Center: {x: -9.850562e-15, y: 0.000007701851, z: 5.769107}
 --- !u!1 &559223177
 GameObject:
   m_ObjectHideFlags: 0
@@ -8426,8 +8570,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &674982760
 GameObject:
   m_ObjectHideFlags: 0
@@ -9007,6 +9151,142 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c3d181c18eed6f8488e1b4c58ea9aac7, type: 3}
   m_PrefabInstance: {fileID: 710383867}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &719258945
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 719258946}
+  - component: {fileID: 719258951}
+  - component: {fileID: 719258950}
+  - component: {fileID: 719258949}
+  - component: {fileID: 719258948}
+  - component: {fileID: 719258947}
+  m_Layer: 0
+  m_Name: ThrowableBox (6)
+  m_TagString: PickUp
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &719258946
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719258945}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 116.75, y: 7, z: -3.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 722800576}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &719258947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719258945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 765a8e7045ce3b643942e3b9ada0738c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBeingThrown: 0
+  hasHitSomething: 0
+  hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
+  damage: 20
+  thrownDirection: {x: 0, y: 0, z: 0}
+--- !u!54 &719258948
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719258945}
+  serializedVersion: 2
+  m_Mass: 5
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!65 &719258949
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719258945}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &719258950
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719258945}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: e9550657425324b4fa2caa8e5d840f05, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &719258951
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719258945}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &722800575
 GameObject:
   m_ObjectHideFlags: 0
@@ -9068,6 +9348,7 @@ Transform:
   - {fileID: 1649691885}
   - {fileID: 1027667013}
   - {fileID: 390756830}
+  - {fileID: 719258946}
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10328,8 +10609,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &758691658
 GameObject:
   m_ObjectHideFlags: 0
@@ -10462,6 +10743,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &767858702
@@ -11112,6 +11397,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &810407885
@@ -11406,6 +11695,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1001 &826735346
@@ -12221,6 +12514,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &880947925
@@ -12319,7 +12616,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &881930661
 Transform:
@@ -12399,6 +12696,161 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881930660}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &883933091
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: pb_Mesh26512
+  serializedVersion: 11
+  m_SubMeshes: []
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 0
+  m_KeepIndices: 0
+  m_IndexFormat: 0
+  m_IndexBuffer: 
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 0
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 0
+    _typelessdata: 
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshMetrics[0]: 1
+  m_MeshMetrics[1]: 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &892447317
 GameObject:
   m_ObjectHideFlags: 0
@@ -12548,6 +13000,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &900730161
@@ -13142,6 +13598,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &950006541
@@ -13206,7 +13666,7 @@ GameObject:
   - component: {fileID: 960582649}
   - component: {fileID: 960582648}
   m_Layer: 0
-  m_Name: Level Trigger (2)
+  m_Name: Level Trigger Level 1
   m_TagString: LevelStart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13219,12 +13679,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 960582646}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -66, y: -6.75, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: -17.5, y: -6, z: -0.5}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1680353280}
+  m_Father: {fileID: 179679003}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &960582648
@@ -13494,7 +13954,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &978227193
 Transform:
@@ -13624,8 +14084,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &980633042
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13819,6 +14279,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1010362436
@@ -13969,8 +14433,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1001 &1027667012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14199,8 +14663,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &1036388853
 GameObject:
   m_ObjectHideFlags: 0
@@ -14314,8 +14778,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &1038079895
 GameObject:
   m_ObjectHideFlags: 0
@@ -14821,6 +15285,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1067963536
@@ -15493,6 +15961,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &1116688308
@@ -15707,8 +16179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &1142690856
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16140,6 +16612,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1155600219
@@ -17994,6 +18470,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &1290385986
@@ -18205,6 +18685,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1304333399
@@ -19046,8 +19530,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &1388745806
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19168,7 +19652,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1388886935}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 883933091}
 --- !u!23 &1388886939
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -19250,7 +19734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 0
+  m_MeshFormatVersion: 2
   m_Faces: []
   m_SharedVertices: []
   m_SharedTextures: []
@@ -19267,8 +19751,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
-  m_Mesh: {fileID: 0}
-  m_VersionIndex: 0
+  m_Mesh: {fileID: 883933091}
+  m_VersionIndex: 4
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -19794,7 +20278,7 @@ GameObject:
   - component: {fileID: 1432096162}
   - component: {fileID: 1432096161}
   m_Layer: 0
-  m_Name: Level Trigger (3)
+  m_Name: Level Trigger Level 2
   m_TagString: LevelStart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20086,7 +20570,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &1490961823
 Transform:
@@ -20217,6 +20701,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &1491069610
@@ -20741,6 +21229,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &1538269897
@@ -21664,6 +22156,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1601112003
@@ -21799,8 +22295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &1609185910
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22307,6 +22803,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &1649691887
@@ -22518,6 +23018,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1657579571
@@ -22568,7 +23072,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &1660569737
 Transform:
@@ -22938,7 +23442,6 @@ Transform:
   - {fileID: 900730159}
   - {fileID: 2071957793}
   - {fileID: 45587675}
-  - {fileID: 960582647}
   - {fileID: 1432096160}
   - {fileID: 216636388}
   - {fileID: 2020267322}
@@ -23633,6 +24136,7 @@ MonoBehaviour:
   - {r: 0.35078788, g: 0.8301887, b: 0.19893196, a: 1}
   numberOfPlayersToProgress: 0
   numberOfEnemiesKilled: 0
+  numberOfEnemiesInLevel: 0
   playersReadyToStart: 0
   timeToStartLevel: 3
   cameraPositionLobby: {x: 0, y: 24, z: -22}
@@ -23647,7 +24151,7 @@ MonoBehaviour:
   - {x: 88, y: 2.5, z: 5}
   - {x: 88, y: 2.5, z: -5}
   - {x: 112, y: 2.5, z: 5}
-  - {x: 122, y: 2.5, z: -5}
+  - {x: 112, y: 2.5, z: -5}
   playersToStartLevel2: 1
   cameraPositionLev2: {x: 200, y: 26.5, z: -16.93}
   playerPositionsLev2:
@@ -23669,6 +24173,10 @@ MonoBehaviour:
   - {x: 388, y: 2.5, z: -5}
   - {x: 412, y: 2.5, z: 5}
   - {x: 412, y: 2.5, z: -5}
+  levelButtons:
+  - {fileID: 1956619384}
+  - {fileID: 552767826}
+  - {fileID: 0}
   helmetPowerUpInLevel: 0
   bombPowerUpInLevel: 0
   chickenPowerUpInLevel: 0
@@ -23823,8 +24331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &1750343333
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24001,8 +24509,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &1769928338
 GameObject:
   m_ObjectHideFlags: 0
@@ -24273,7 +24781,7 @@ GameObject:
   - component: {fileID: 1779926661}
   - component: {fileID: 1779926660}
   m_Layer: 0
-  m_Name: Level Start Trigger
+  m_Name: Level Start Trigger Lobby
   m_TagString: LevelStart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24407,8 +24915,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &1791069215
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24902,8 +25410,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &1842837815
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25708,6 +26216,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1900564899
@@ -25956,8 +26468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1001 &1915057904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26567,8 +27079,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!1 &1951158817
 GameObject:
   m_ObjectHideFlags: 0
@@ -26615,6 +27127,120 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1956619381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1956619382}
+  - component: {fileID: 1956619386}
+  - component: {fileID: 1956619385}
+  - component: {fileID: 1956619384}
+  - component: {fileID: 1956619383}
+  m_Layer: 0
+  m_Name: Button Level 1
+  m_TagString: Button
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1956619382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956619381}
+  m_LocalRotation: {x: 0.70710546, y: -0.0013944673, z: -0.0013944673, w: -0.70710546}
+  m_LocalPosition: {x: -18.099998, y: 6.16, z: 0.22899914}
+  m_LocalScale: {x: 0.050000016, y: 0.20000003, z: 0.10000001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 179679003}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1956619383
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956619381}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 57.42, y: 15, z: 6.7}
+  m_Center: {x: -9.850562e-15, y: 0.000007701851, z: 3.4}
+--- !u!114 &1956619384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956619381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a579553ba907247961ab29e19167e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canBePressed: 0
+  hasBeenPressed: 0
+  levelTrigger: {fileID: 960582646}
+  positionToSetTrigger: {x: -17.5, y: 2.25, z: -0.5}
+--- !u!23 &1956619385
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956619381}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4edeba2a39a41f745a1b48d9c901f4b4, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1956619386
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956619381}
+  m_Mesh: {fileID: -5243098771569098612, guid: aedb767a42f654040a019fcf514e0ea7, type: 3}
 --- !u!1 &1972865959
 GameObject:
   m_ObjectHideFlags: 0
@@ -27624,8 +28250,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &2003606391
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27822,8 +28448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &2020267324
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28133,8 +28759,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &2036232120
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28589,6 +29215,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 20
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &2071957795
@@ -28720,8 +29350,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceDirections: 0
-  force: 15
-  upwardsForce: 150
+  force: 12
+  upwardsForce: 135
 --- !u!65 &2092316919
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29370,7 +30000,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh86358
+  m_Name: pb_Mesh27096
   serializedVersion: 11
   m_SubMeshes: []
   m_Shapes:
