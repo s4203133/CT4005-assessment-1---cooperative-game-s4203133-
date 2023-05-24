@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -139,14 +139,14 @@ public class PauseMenu : MonoBehaviour {
 
     public void PauseTheGame() {
         currentPauseButton = PauseButtons.resume;
+        foreach (GameObject throwableObejct in allThrowableObjects) {
+            throwableObejct.GetComponent<Throwable>().PausePhysics();
+        }
         foreach (GameObject player in playerManager.players) {
             PlayerController playerController = player.GetComponent<PlayerController>();
             playerController.stateBeforePaused = playerController.playerState;
             playerController.playerState = PlayerController.playerMode.stationary;
-            player.GetComponent<Rigidbody>().isKinematic = true;
-        }
-        foreach(GameObject throwableObejct in allThrowableObjects) {
-            throwableObejct.GetComponent<Throwable>().PausePhysics();
+            playerController.PausePhysics();
         }
         foreach (GameObject enemy in enemySpawner.allEnemies) {
             enemy.GetComponent<EnemyPatrol>().FreezeAgent();
@@ -170,7 +170,7 @@ public class PauseMenu : MonoBehaviour {
         foreach (GameObject player in playerManager.players) {
             PlayerController playerController = player.GetComponent<PlayerController>();
             playerController.playerState = playerController.stateBeforePaused;
-            player.GetComponent<Rigidbody>().isKinematic = false;
+            playerController.ResumePhysics();
             playerController.CancelStrafe();
             playerController.LowerShield();
         }
@@ -219,8 +219,8 @@ public class PauseMenu : MonoBehaviour {
         return isPaused;
     }
 
-    public void AddItemToPause(Throwable throwableToAdd) {
-        
+    public void AddItemToPause(Animator animatorToAdd) {
+
     }
 
     public void AddItemToPause() {

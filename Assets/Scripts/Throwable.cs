@@ -129,10 +129,6 @@ public class Throwable : MonoBehaviour
 
     public void PausePhysics() {
         velocityToReturn = rb.velocity;
-        if (rb.isKinematic) {
-
-        }
-        rb.velocity = Vector3.zero;
         rb.isKinematic = true;
     }
 

@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour {
     private PlayerHealth health;
     private CameraShake cameraShake;
     private PauseMenu pauseMenu;
+    private Vector3 velocityToReturn; // Velocity to set player when game is unpaused
 
     private Image damageEffect;
 
@@ -207,7 +208,6 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() {
         PlayerControls();
-        
 
         if (isDashing) {
             float dashTimer = 0;
@@ -409,6 +409,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void PlayerControls() {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (playerState == playerMode.move) {
             // Get a variable to be the difference between our current velocity and the max speed
             // When the player makes a greater change in direction, this number will be larger, appying more velocity to the rigidbody, creating more responsive movement
@@ -876,5 +879,15 @@ public class PlayerController : MonoBehaviour {
         if (other.tag == "LadderTrigger") {
             isInRangeOfLadder = false;
         }
+    }
+
+    public void PausePhysics() {
+        velocityToReturn = rb.velocity;
+        rb.isKinematic = true;
+    }
+
+    public void ResumePhysics() {
+        rb.isKinematic = false;
+        rb.velocity = velocityToReturn;
     }
 }
