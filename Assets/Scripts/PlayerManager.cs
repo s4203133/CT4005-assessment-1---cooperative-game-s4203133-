@@ -27,10 +27,16 @@ public class PlayerManager : MonoBehaviour
     public int numberOfEnemiesKilled;
     public int numberOfEnemiesInLevel;
 
+    [SerializeField]
     private PlayerInputManager inputManager;
+    [SerializeField]
     private EnemySpawner enemySpawner;
+    [SerializeField]
     private GameOver gameOver;
+    [SerializeField]
     private Camera cam;
+    [SerializeField]
+    private PauseMenu pauseMenu;
 
     public int playersReadyToStart;
     private float levelStartCounter;
@@ -61,7 +67,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private PuzzleButton[] levelButtons;
 
-
     public bool helmetPowerUpInLevel, bombPowerUpInLevel, chickenPowerUpInLevel;
 
     public GameObject joinGamePrompt;
@@ -69,7 +74,7 @@ public class PlayerManager : MonoBehaviour
     public Image loadingLevelBar;
 
     public Image blackOverlay;
-    private bool loadingLevel;
+    public bool loadingLevel;
 
     private bool isGameOver;
 
@@ -78,15 +83,14 @@ public class PlayerManager : MonoBehaviour
     {
         currentLevel = level.Lobby;
         players = new List <GameObject>();
-        inputManager = GetComponent<PlayerInputManager>();
-        gameOver = GameObject.FindGameObjectWithTag("Finish").GetComponent<GameOver>();
-        cam = Camera.main;
-        enemySpawner = FindObjectOfType<EnemySpawner>();
         enemySpawner.PrepareToSpawn(0, numberOfPlayers);
         FadeOutBlackScreen();
     }
 
     private void Update() {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (numberOfActivePlayers == 0) {
             if(currentLevel != level.Lobby) {
                     gameOver.EndGame();
@@ -175,9 +179,15 @@ public class PlayerManager : MonoBehaviour
     }
 
     private IEnumerator ChangeLevel(int level, Vector3 cameraPosition, Vector3[] playerPositions) {
+        if (pauseMenu.IsTheGamePaused()) {
+            yield break;
+        }
         loadingLevel = true;
         blackOverlay.CrossFadeColor(Color.black, 1f, false, true);
         yield return new WaitForSeconds(1f);
+        if (pauseMenu.IsTheGamePaused()) {
+            yield return null;
+        }
         cam.transform.position = cameraPosition;
         numberOfEnemiesKilled = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -211,7 +221,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void FadeInBlackScreen() {
-        blackOverlay.CrossFadeColor(Color.blue, 1f, false, true);
+        blackOverlay.CrossFadeColor(Color.black, 1f, false, true);
     }
 
     public void FadeOutBlackScreen() {

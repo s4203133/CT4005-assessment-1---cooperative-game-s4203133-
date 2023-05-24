@@ -37,6 +37,9 @@ public class EnemySpawner : MonoBehaviour
     private int numberOfWavesToSpawn;
     private float timer;
 
+    [SerializeField]
+    private PauseMenu pauseMenu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,6 +71,9 @@ public class EnemySpawner : MonoBehaviour
     }
 
     public IEnumerator SpawnEnemies() {
+        if (pauseMenu.IsTheGamePaused()) {
+            yield break;
+        }
         // Wait for a short delay before the spawning begins
         yield return new WaitForSeconds(startDelay);
         // Check which spawn mode is selected, and spawn the enemies accordingly
@@ -84,7 +90,6 @@ public class EnemySpawner : MonoBehaviour
                 break;
             // Spawns a specific amount of waves of enemies (useful when spawning in groups)
             case(spawnTypes.spawnSetNumberOfWaves):
-                
                 for (int i = 0; i < numberOfWavesToSpawn; i++) {
                     SpawnEnemy();
                     numberOfWavesSpawned++;
@@ -96,17 +101,20 @@ public class EnemySpawner : MonoBehaviour
                 // Used a large for loop because it needs to run until the timer runs out, and then break
                 for (int i = 0; i < 100; i++) {
                     if (timer <= spawnDelay) {
-                        yield break;
+                        yield return null;
                     } else {
                         SpawnEnemy();
                         yield return new WaitForSeconds(spawnDelay);
                     }
                 }
-                break;
+            break;
         }
     }
 
     void SpawnEnemy() {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (!spawnInGroups) {
             // Select one of the spawn points in the level at random to place the enemies
             GameObject newEnemy = Instantiate(enemyObject, GetRandomSpawnPoint().position, Quaternion.identity);

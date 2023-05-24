@@ -73,24 +73,6 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Pause"",
-                    ""type"": ""Button"",
-                    ""id"": ""309776cf-e07b-41f2-babf-81aa0595c9f2"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Exit"",
-                    ""type"": ""Button"",
-                    ""id"": ""0f34a647-5be5-4643-acd5-a41944fa56d5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Dismount"",
                     ""type"": ""Button"",
                     ""id"": ""1d093ba1-9e9b-4518-bc45-c93fc47a82ea"",
@@ -103,6 +85,60 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                     ""name"": ""AnyButton"",
                     ""type"": ""Button"",
                     ""id"": ""8ac99054-c09c-4d06-9b87-7b229af24833"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""309776cf-e07b-41f2-babf-81aa0595c9f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMoveDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""75fdc4d5-c2b2-4adb-88b7-492715126885"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMoveUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f34a647-5be5-4643-acd5-a41944fa56d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMoveLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""38576004-73a2-4682-bc21-1977977c0f61"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMoveRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c700b86-d806-4ef9-bf98-4f5d9688a4b9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseSelect"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d8d5b2f-a87c-42bd-9d28-7596209ae486"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -321,17 +357,6 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7f783656-6820-40c7-a167-b372135bf786"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""079b93f2-1c46-4e63-b7b9-d937380245b2"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
@@ -343,12 +368,111 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""612d965a-5532-4b1c-919b-5696c90df13a"",
-                    ""path"": ""<Gamepad>/select"",
+                    ""id"": ""7f783656-6820-40c7-a167-b372135bf786"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Exit"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""612d965a-5532-4b1c-919b-5696c90df13a"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f80fb26-acbe-4930-8b00-927237fd985b"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fea4929-1053-4ee1-a1b1-4349065051b6"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb240c14-3bf7-476f-826f-f14008ea766f"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1621b00f-8b1a-4a33-9e54-56bb0a7af39d"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46f0efdf-77bc-4f73-91a7-2fd0a42e20bb"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d5d114d-062b-4607-97c1-aef82d26d9ca"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fc64cd8-a570-4580-988d-26a570c5a5f4"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c5db858-26dd-46f1-9fbe-954879a2a698"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMoveRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -454,10 +578,14 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
         m_Controller_Dash = m_Controller.FindAction("Dash", throwIfNotFound: true);
         m_Controller_Block = m_Controller.FindAction("Block", throwIfNotFound: true);
         m_Controller_Strafe = m_Controller.FindAction("Strafe", throwIfNotFound: true);
-        m_Controller_Pause = m_Controller.FindAction("Pause", throwIfNotFound: true);
-        m_Controller_Exit = m_Controller.FindAction("Exit", throwIfNotFound: true);
         m_Controller_Dismount = m_Controller.FindAction("Dismount", throwIfNotFound: true);
         m_Controller_AnyButton = m_Controller.FindAction("AnyButton", throwIfNotFound: true);
+        m_Controller_Pause = m_Controller.FindAction("Pause", throwIfNotFound: true);
+        m_Controller_PauseMoveDown = m_Controller.FindAction("PauseMoveDown", throwIfNotFound: true);
+        m_Controller_PauseMoveUp = m_Controller.FindAction("PauseMoveUp", throwIfNotFound: true);
+        m_Controller_PauseMoveLeft = m_Controller.FindAction("PauseMoveLeft", throwIfNotFound: true);
+        m_Controller_PauseMoveRight = m_Controller.FindAction("PauseMoveRight", throwIfNotFound: true);
+        m_Controller_PauseSelect = m_Controller.FindAction("PauseSelect", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_MoveDown = m_Menu.FindAction("MoveDown", throwIfNotFound: true);
@@ -527,10 +655,14 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
     private readonly InputAction m_Controller_Dash;
     private readonly InputAction m_Controller_Block;
     private readonly InputAction m_Controller_Strafe;
-    private readonly InputAction m_Controller_Pause;
-    private readonly InputAction m_Controller_Exit;
     private readonly InputAction m_Controller_Dismount;
     private readonly InputAction m_Controller_AnyButton;
+    private readonly InputAction m_Controller_Pause;
+    private readonly InputAction m_Controller_PauseMoveDown;
+    private readonly InputAction m_Controller_PauseMoveUp;
+    private readonly InputAction m_Controller_PauseMoveLeft;
+    private readonly InputAction m_Controller_PauseMoveRight;
+    private readonly InputAction m_Controller_PauseSelect;
     public struct ControllerActions
     {
         private @Player1Input m_Wrapper;
@@ -540,10 +672,14 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Controller_Dash;
         public InputAction @Block => m_Wrapper.m_Controller_Block;
         public InputAction @Strafe => m_Wrapper.m_Controller_Strafe;
-        public InputAction @Pause => m_Wrapper.m_Controller_Pause;
-        public InputAction @Exit => m_Wrapper.m_Controller_Exit;
         public InputAction @Dismount => m_Wrapper.m_Controller_Dismount;
         public InputAction @AnyButton => m_Wrapper.m_Controller_AnyButton;
+        public InputAction @Pause => m_Wrapper.m_Controller_Pause;
+        public InputAction @PauseMoveDown => m_Wrapper.m_Controller_PauseMoveDown;
+        public InputAction @PauseMoveUp => m_Wrapper.m_Controller_PauseMoveUp;
+        public InputAction @PauseMoveLeft => m_Wrapper.m_Controller_PauseMoveLeft;
+        public InputAction @PauseMoveRight => m_Wrapper.m_Controller_PauseMoveRight;
+        public InputAction @PauseSelect => m_Wrapper.m_Controller_PauseSelect;
         public InputActionMap Get() { return m_Wrapper.m_Controller; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -568,18 +704,30 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                 @Strafe.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnStrafe;
                 @Strafe.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnStrafe;
                 @Strafe.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnStrafe;
-                @Pause.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
-                @Pause.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
-                @Pause.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
-                @Exit.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnExit;
-                @Exit.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnExit;
-                @Exit.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnExit;
                 @Dismount.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnDismount;
                 @Dismount.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnDismount;
                 @Dismount.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnDismount;
                 @AnyButton.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnAnyButton;
                 @AnyButton.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnAnyButton;
                 @AnyButton.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnAnyButton;
+                @Pause.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPause;
+                @PauseMoveDown.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveDown;
+                @PauseMoveDown.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveDown;
+                @PauseMoveDown.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveDown;
+                @PauseMoveUp.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveUp;
+                @PauseMoveUp.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveUp;
+                @PauseMoveUp.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveUp;
+                @PauseMoveLeft.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveLeft;
+                @PauseMoveLeft.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveLeft;
+                @PauseMoveLeft.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveLeft;
+                @PauseMoveRight.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveRight;
+                @PauseMoveRight.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveRight;
+                @PauseMoveRight.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseMoveRight;
+                @PauseSelect.started -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseSelect;
+                @PauseSelect.performed -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseSelect;
+                @PauseSelect.canceled -= m_Wrapper.m_ControllerActionsCallbackInterface.OnPauseSelect;
             }
             m_Wrapper.m_ControllerActionsCallbackInterface = instance;
             if (instance != null)
@@ -599,18 +747,30 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
                 @Strafe.started += instance.OnStrafe;
                 @Strafe.performed += instance.OnStrafe;
                 @Strafe.canceled += instance.OnStrafe;
-                @Pause.started += instance.OnPause;
-                @Pause.performed += instance.OnPause;
-                @Pause.canceled += instance.OnPause;
-                @Exit.started += instance.OnExit;
-                @Exit.performed += instance.OnExit;
-                @Exit.canceled += instance.OnExit;
                 @Dismount.started += instance.OnDismount;
                 @Dismount.performed += instance.OnDismount;
                 @Dismount.canceled += instance.OnDismount;
                 @AnyButton.started += instance.OnAnyButton;
                 @AnyButton.performed += instance.OnAnyButton;
                 @AnyButton.canceled += instance.OnAnyButton;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @PauseMoveDown.started += instance.OnPauseMoveDown;
+                @PauseMoveDown.performed += instance.OnPauseMoveDown;
+                @PauseMoveDown.canceled += instance.OnPauseMoveDown;
+                @PauseMoveUp.started += instance.OnPauseMoveUp;
+                @PauseMoveUp.performed += instance.OnPauseMoveUp;
+                @PauseMoveUp.canceled += instance.OnPauseMoveUp;
+                @PauseMoveLeft.started += instance.OnPauseMoveLeft;
+                @PauseMoveLeft.performed += instance.OnPauseMoveLeft;
+                @PauseMoveLeft.canceled += instance.OnPauseMoveLeft;
+                @PauseMoveRight.started += instance.OnPauseMoveRight;
+                @PauseMoveRight.performed += instance.OnPauseMoveRight;
+                @PauseMoveRight.canceled += instance.OnPauseMoveRight;
+                @PauseSelect.started += instance.OnPauseSelect;
+                @PauseSelect.performed += instance.OnPauseSelect;
+                @PauseSelect.canceled += instance.OnPauseSelect;
             }
         }
     }
@@ -671,10 +831,14 @@ public partial class @Player1Input : IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
         void OnStrafe(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
-        void OnExit(InputAction.CallbackContext context);
         void OnDismount(InputAction.CallbackContext context);
         void OnAnyButton(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnPauseMoveDown(InputAction.CallbackContext context);
+        void OnPauseMoveUp(InputAction.CallbackContext context);
+        void OnPauseMoveLeft(InputAction.CallbackContext context);
+        void OnPauseMoveRight(InputAction.CallbackContext context);
+        void OnPauseSelect(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

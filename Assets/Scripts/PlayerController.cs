@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO.IsolatedStorage;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour {
     private MeshRenderer mesh;
 
     public enum playerMode {
-        stationry, // Player is unable to do anything 
+        stationary, // Player is unable to do anything 
         move, // Player can move around and control as normal
         beingHeld, // Player is being held by another player and can no longer use controls
         beingThrown, // Player is being thrown and cannot use controls until they've landed
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public playerMode playerState;
+    public playerMode stateBeforePaused;
 
     private Transform thisTransform;
 
@@ -182,20 +184,24 @@ public class PlayerController : MonoBehaviour {
         playerManager.ChangeNumberOfActivePlayers(+1);
     }
 
-    void EnableControls() {
+    public void EnableControls() {
+        playerInput.Controller.Enable();
         playerInput.Controller.Move.Enable();
         playerInput.Controller.Interact.Enable();
         playerInput.Controller.Dash.Enable();
         playerInput.Controller.Block.Enable();
-        playerInput.Controller.Enable();
     }
 
-    void OnDisable() {
+    public void DisableControls() {
+        playerInput.Controller.Disable();
         playerInput.Controller.Move.Disable();
         playerInput.Controller.Interact.Disable();
         playerInput.Controller.Dash.Disable();
         playerInput.Controller.Block.Disable();
-        // playerInput.Controller.Strafe.Enable();
+    }
+
+    void OnDisable() {
+        DisableControls();
         playerManager.ChangeNumberOfActivePlayers(-1);
     }
 
@@ -219,11 +225,12 @@ public class PlayerController : MonoBehaviour {
         }
 
         // Rumble the controllers when holding the button down
-        if (interactInputTime >= 0.98 && !health.isDead) {
+        if (interactInputTime >= 0.95 && !health.isDead && !pauseMenu.IsTheGamePaused()) {
             Gamepad.current.SetMotorSpeeds(0.015f, 0.015f);
         } else {
             Gamepad.current.SetMotorSpeeds(0f, 0f);
         }
+        
     }
 
     void Update() {
@@ -268,6 +275,9 @@ public class PlayerController : MonoBehaviour {
 
 
     public void OnMove(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (context.performed) {
             moveInput = context.ReadValue<Vector2>();
 
@@ -283,11 +293,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void StartDash(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+             return;
+        }
         if (context.performed && !isDashing)
             StartCoroutine(Dash());
     }
 
     public void Interact(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (context.performed) {
             PickUp();
         } else if (context.canceled) {
@@ -296,6 +312,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Block(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (context.performed) {
             if (!isHoldingItem) {
                 RaiseShield();
@@ -306,6 +325,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Strafe (InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (context.performed) {
             isStrafing = true;
         } else if (context.canceled) {
@@ -315,23 +337,59 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void PauseGame(InputAction.CallbackContext context) {
-        if (context.performed) {
-            if (pauseMenu.IsTheGamePaused()) {
-                pauseMenu.ResumeGame();
-            } else {
+        if (playerManager.loadingLevel) {
+            return;
+        }
+        if (!pauseMenu.IsTheGamePaused()) {
+            if (context.performed) {
                 pauseMenu.PauseTheGame();
+
             }
         }
     }
-    public void ExitGame(InputAction.CallbackContext context) {
-        if (context.performed) {
-            if (pauseMenu.IsTheGamePaused()) {
-                pauseMenu.ReturnToMenu();
+    public void MoveUpPauseMenu(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            if (context.performed) {
+                pauseMenu.MoveUp();
+            }
+        }
+    }
+    public void MoveDownPauseMenu(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            if (context.performed) {
+                pauseMenu.MoveDown();
+            }
+        }
+    }
+
+    public void MoveLeftPauseMenu(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            if (context.performed) {
+                pauseMenu.MoveLeft();
+            }
+        }
+    }
+
+    public void MoveRightPauseMenu(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            if (context.performed) {
+                pauseMenu.moveRight();
+            }
+        }
+    }
+
+    public void PauseSelect(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            if (context.performed) {
+                pauseMenu.SelectButton();
             }
         }
     }
 
     public void DismountFromPlayer(InputAction.CallbackContext context) {
+        if (pauseMenu.IsTheGamePaused()) {
+            return;
+        }
         if (context.performed) {
             if(playerState == playerMode.beingHeld) {
                 PlayerController parentPlayer = thisTransform.parent.GetComponent<PlayerController>();
@@ -417,6 +475,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     private IEnumerator Dash() {
+        if (pauseMenu.IsTheGamePaused()) {
+            yield break;
+        }
         hasDashed = true;
         if (playerState != playerMode.move || !canDash || isStrafing) {
             yield break;
@@ -528,6 +589,7 @@ public class PlayerController : MonoBehaviour {
         if (isHoldingItem && isButtonDown) {
             // The script of the player being held
             PlayerController otherPlayer = heldItem.GetComponent<PlayerController>();
+            Throwable thrownObject = heldItem.GetComponent<Throwable>();
 
             // If the button is tapped
             if (interactInputTime < minMaxHoldTime.x) {
@@ -537,7 +599,6 @@ public class PlayerController : MonoBehaviour {
             // THROW THE OBJECT 
             // If the button has been held down rather than tapped 
             else if (interactInputTime >= minMaxHoldTime.x) {
-
                 if (otherPlayer != null) {
                     // If the player being held is also holding an object, don't throw them
                     if (otherPlayer.isHoldingItem) {
@@ -545,13 +606,11 @@ public class PlayerController : MonoBehaviour {
                         interactInputTime = 0;
                         return;
                     }
-
                     otherPlayer.isBeingHeld = false;
                     otherPlayer.playerState = PlayerController.playerMode.beingThrown;
                 }
                 // Unparent the held item object, and adjust variables in the damage script on it so it can be registered as thrown and harm enemies
                 heldItem.transform.parent = null;
-                Throwable thrownObject = heldItem.GetComponent<Throwable>();
                 if (thrownObject != null) {
                     thrownObject.isBeingThrown = true;
                     thrownObject.damage *= interactInputTime;
@@ -572,18 +631,14 @@ public class PlayerController : MonoBehaviour {
                 parentController = thisTransform.parent.GetComponent<PlayerController>();
             }
             // If parent object has a player controller, then we are being held by another player, so set player's state to being held
-            if (parentController == null) {
-                playerState = playerMode.move;
+            if (parentController != null) {
+                playerState = playerMode.beingHeld;
             }
             // If the player isn't being held, then set the current state to move
             else {
-                playerState = playerMode.beingHeld;
+                playerState = playerMode.move;
             }
             isHoldingItem = false;
-            if (otherPlayer != null) {
-                //otherPlayer.isBeingHeld = false;
-                //otherPlayer.ToggleCanControl(true);
-            }
         }
         // Reset the input variables
         isButtonDown = false;
@@ -632,11 +687,15 @@ public class PlayerController : MonoBehaviour {
         isBlocking = true;
     }
 
-    void LowerShield() {
+    public void LowerShield() {
         // Return the players move speed, and de-activate their shield object
         maxSpeed = originalMaxSpeed;
         shield.SetActive(false);
         isBlocking = false;
+    }
+
+    public void CancelStrafe() {
+        isStrafing = false;
     }
 
     // Apply knockback force to the players rigid body, and decrease it over time to smooth it out

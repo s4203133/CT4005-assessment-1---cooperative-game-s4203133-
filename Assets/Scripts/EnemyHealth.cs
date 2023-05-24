@@ -46,6 +46,10 @@ public class EnemyHealth : MonoBehaviour
     private CameraShake camShake;
     [SerializeField]
     private PlayerManager playerManager;
+    [SerializeField]
+    private PauseMenu pauseMenu;
+    private Vector3 velocityToReturn; // The velocity of the object before the game was paused
+                                      // to apply back on the rigidbody when the game resumes
 
     void Start()
     {
@@ -68,6 +72,9 @@ public class EnemyHealth : MonoBehaviour
 
     private IEnumerator Death(float delay) {
         yield return new WaitForSeconds(delay);
+        if (pauseMenu.IsTheGamePaused()) {
+            yield break;
+        }
         ParticleSystem newDeathParticles = Instantiate(deathParticles, transform.position, Quaternion.identity);
         if(objectHitBy != null && objectHitBy.tag == "Player") {
             if(powerUpSpawnChanceIndex <= powerUpSpawnChance) {
@@ -152,5 +159,15 @@ public class EnemyHealth : MonoBehaviour
 
     public void CancelDeath() {
         StopCoroutine(deathCountdown);
+    }
+
+    public void PausePhysics() {
+        velocityToReturn = rb.velocity;
+        rb.isKinematic = true;
+    }
+
+    public void ResumePhysics() {
+        rb.isKinematic = false;
+        rb.velocity = velocityToReturn;
     }
 }

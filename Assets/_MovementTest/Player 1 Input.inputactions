@@ -51,24 +51,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Pause",
-                    "type": "Button",
-                    "id": "309776cf-e07b-41f2-babf-81aa0595c9f2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Exit",
-                    "type": "Button",
-                    "id": "0f34a647-5be5-4643-acd5-a41944fa56d5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Dismount",
                     "type": "Button",
                     "id": "1d093ba1-9e9b-4518-bc45-c93fc47a82ea",
@@ -81,6 +63,60 @@
                     "name": "AnyButton",
                     "type": "Button",
                     "id": "8ac99054-c09c-4d06-9b87-7b229af24833",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "309776cf-e07b-41f2-babf-81aa0595c9f2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PauseMoveDown",
+                    "type": "Button",
+                    "id": "75fdc4d5-c2b2-4adb-88b7-492715126885",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PauseMoveUp",
+                    "type": "Button",
+                    "id": "0f34a647-5be5-4643-acd5-a41944fa56d5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PauseMoveLeft",
+                    "type": "Button",
+                    "id": "38576004-73a2-4682-bc21-1977977c0f61",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PauseMoveRight",
+                    "type": "Button",
+                    "id": "5c700b86-d806-4ef9-bf98-4f5d9688a4b9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PauseSelect",
+                    "type": "Button",
+                    "id": "9d8d5b2f-a87c-42bd-9d28-7596209ae486",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -299,17 +335,6 @@
                 },
                 {
                     "name": "",
-                    "id": "7f783656-6820-40c7-a167-b372135bf786",
-                    "path": "<Gamepad>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "079b93f2-1c46-4e63-b7b9-d937380245b2",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
@@ -321,12 +346,111 @@
                 },
                 {
                     "name": "",
-                    "id": "612d965a-5532-4b1c-919b-5696c90df13a",
-                    "path": "<Gamepad>/select",
+                    "id": "7f783656-6820-40c7-a167-b372135bf786",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "612d965a-5532-4b1c-919b-5696c90df13a",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f80fb26-acbe-4930-8b00-927237fd985b",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6fea4929-1053-4ee1-a1b1-4349065051b6",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb240c14-3bf7-476f-826f-f14008ea766f",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1621b00f-8b1a-4a33-9e54-56bb0a7af39d",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "46f0efdf-77bc-4f73-91a7-2fd0a42e20bb",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d5d114d-062b-4607-97c1-aef82d26d9ca",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2fc64cd8-a570-4580-988d-26a570c5a5f4",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c5db858-26dd-46f1-9fbe-954879a2a698",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMoveRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

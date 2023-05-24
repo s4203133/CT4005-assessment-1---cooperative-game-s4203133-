@@ -1107,7 +1107,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1224073600776826160}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: ExitGame
+        m_MethodName: MoveUpPauseMenu
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1119,6 +1119,70 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0f34a647-5be5-4643-acd5-a41944fa56d5
     m_ActionName: Controller/Exit[/SwitchProControllerHID/select]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1224073600776826160}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: MoveDownPauseMenu
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 75fdc4d5-c2b2-4adb-88b7-492715126885
+    m_ActionName: Controller/PauseMoveDown[/SwitchProControllerHID/dpad/down,/SwitchProControllerHID/leftStick/down]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1224073600776826160}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: PauseSelect
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9d8d5b2f-a87c-42bd-9d28-7596209ae486
+    m_ActionName: Controller/PauseSelect[/SwitchProControllerHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1224073600776826160}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: MoveLeftPauseMenu
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 38576004-73a2-4682-bc21-1977977c0f61
+    m_ActionName: Controller/PauseMoveLeft[/SwitchProControllerHID/dpad/left,/SwitchProControllerHID/leftStick/left]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1224073600776826160}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: MoveRightPauseMenu
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5c700b86-d806-4ef9-bf98-4f5d9688a4b9
+    m_ActionName: Controller/PauseMoveRight[/SwitchProControllerHID/dpad/right,/SwitchProControllerHID/leftStick/right]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Controller
@@ -1137,6 +1201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerState: 0
+  stateBeforePaused: 0
   isBeingHeld: 0
   acceleration: 10
   maxSpeed: 400
@@ -1205,6 +1270,10 @@ MonoBehaviour:
   isBeingThrown: 0
   hasHitSomething: 0
   hitSpring: 0
+  player: {fileID: 0}
+  playerManager: {fileID: 0}
+  playerHealth: {fileID: 0}
+  rb: {fileID: 0}
   damage: 35
   thrownDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &6760212622463715130

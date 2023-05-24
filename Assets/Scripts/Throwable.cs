@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 
 public class Throwable : MonoBehaviour
@@ -23,6 +21,9 @@ public class Throwable : MonoBehaviour
     public Vector3 thrownDirection;
 
     private CameraShake cameraShake;
+    private PauseMenu pauseMenu;
+    private Vector3 velocityToReturn; // The velocity of the object before the game was paused
+                                      // to apply back on the rigidbody when the game resumes
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,7 @@ public class Throwable : MonoBehaviour
         hasHitSomething = false;
         originalDamage = damage;
         cameraShake = Camera.main.GetComponent<CameraShake>();
+        pauseMenu = GameObject.FindGameObjectWithTag("Pause").GetComponent<PauseMenu>();
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -42,12 +44,14 @@ public class Throwable : MonoBehaviour
             hasHitSomething = true;
             StartCoroutine(ReturnControls(0.85f));
         }
-        isBeingThrown = false;
+        StartCoroutine(CancelIsBeingThrown(0.25f));
     }
 
     private IEnumerator ReturnControls(float timeDelay) {
         damage = originalDamage;
-
+        if (pauseMenu.IsTheGamePaused()) {
+            yield return null;
+        }
         // Check that this object has a player script, and re-enable it
         if (player != null) {
             yield return new WaitForSeconds(timeDelay);
@@ -60,7 +64,6 @@ public class Throwable : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        hasHitSomething = true;
         if (other.tag == "Catcher") {
             if (playerManager.currentLevel == PlayerManager.level.Lobby) {
                 transform.position = new Vector3(0, 10, 0);
@@ -77,7 +80,7 @@ public class Throwable : MonoBehaviour
         }
 
         // If the player hits something while being thrown
-        if (isBeingThrown || (player != null && player.playerState == PlayerController.playerMode.beingThrown)) {
+        if (isBeingThrown || (player != null && player.playerState ==PlayerController.playerMode.beingThrown)) {
             if (other.tag == "Enemy") {
                 rb.velocity *= 0.5f;
                 float cameraShakeMagnitude = (damage * (100 / originalDamage)) / 100;
@@ -87,10 +90,13 @@ public class Throwable : MonoBehaviour
                 hitEnemy.KnockBackEnemy(this, true);
                 //If the thrown object is a player, set them invincible so they can escape after being thrown
                 if (player != null) {
-                    player.SetInvincibilityTimer(1.1f);
+                player.SetInvincibilityTimer(1.1f);
                 }
             }
             else if (other.tag == "Spring") {
+                 if (pauseMenu.IsTheGamePaused()) {
+                    return;
+                 }
                 hitSpring = true;
                 Spring spring = other.GetComponent<Spring>();
                 if (spring != null) {
@@ -102,16 +108,36 @@ public class Throwable : MonoBehaviour
                 rb.AddForce(Vector3.up * 50, ForceMode.Impulse);
                 other.GetComponent<PuzzleButton>().PressButton();
             }
-
             if (!hitSpring) {
                 StartCoroutine(ReturnControls(0.85f));
             }
         }
+
+        hasHitSomething = true;
+    }
+
+    private IEnumerator CancelIsBeingThrown(float delay) {
+        yield return new WaitForSeconds(delay);
+        isBeingThrown = false;
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.tag == "Spring") {
             hitSpring = false;
         }
+    }
+
+    public void PausePhysics() {
+        velocityToReturn = rb.velocity;
+        if (rb.isKinematic) {
+
+        }
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+    }
+
+    public void ResumePhysics() {
+        rb.isKinematic = false;
+        rb.velocity = velocityToReturn;
     }
 }

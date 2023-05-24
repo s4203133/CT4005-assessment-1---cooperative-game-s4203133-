@@ -18,6 +18,9 @@ public class EnemyPatrol : MonoBehaviour
 
     private bool isPlayerAvailable = false;
 
+    [SerializeField]
+    private PauseMenu pauseMenu;
+
     // Start is called before the first frame update
     void Start() {
         players = FindObjectsOfType<PlayerController>();
@@ -84,6 +87,9 @@ public class EnemyPatrol : MonoBehaviour
     }
 
     IEnumerator Wander() {
+        if (pauseMenu.IsTheGamePaused()) {
+            yield return null;
+        }
         Vector3 randomLocation = new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
         agent.destination = transform.position + randomLocation;
         yield return new WaitForSeconds(Random.Range(3f, 7f));
